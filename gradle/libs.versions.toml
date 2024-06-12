@@ -1,18 +1,33 @@
 [versions]
 agp = "8.3.2"
+androidYoutubeextractor = "master-SNAPSHOT"
+composeBomVersion = "2023.03.00"
+ffmpeg = "42c7dfcee1"
+library = "42c7dfcee1"
+aria = "-SNAPSHOT"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
+
 lifecycleRuntimeKtx = "2.8.0"
 activityCompose = "1.9.0"
 composeBom = "2024.05.00"
 appcompat = "1.6.1"
 material = "1.12.0"
-
+ktor = "2.3.11"
+rxandroidVersion = "2.1.1"
+rxjavaVersion = "2.2.21"
+ytdl = "0.14.+"
+appcompatVersion = "1.7.0"
 [libraries]
+android-youtubeExtractor = { module = "com.github.HaarigerHarald:android-youtubeExtractor", version.ref = "androidYoutubeextractor" }
+androidx-compose-bom-v20230300 = { module = "androidx.compose:compose-bom", version.ref = "composeBomVersion" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+aria2c = { module = "com.github.yausername.youtubedl-android:aria2c", version.ref = "aria" }
+ffmpeg = { module = "com.github.yausername.youtubedl-android:ffmpeg", version.ref = "ffmpeg" }
+libraryv = { module = "com.github.yausername.youtubedl-android:library", version.ref = "library" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -28,7 +43,15 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-content-negotiation = {module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = {module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-logging = {module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+rxjava2-rxandroid = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rxandroidVersion" }
+rxjava2-rxjava = { module = "io.reactivex.rxjava2:rxjava", version.ref = "rxjavaVersion" }
+ytdl-library = {module = "com.github.yausername.youtubedl-android:library", version.ref = "ytdl" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompatVersion" }
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

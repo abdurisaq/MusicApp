@@ -1,9 +1,12 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+
 }
 
+
 android {
+
     namespace = "com.example.modularapp"
     compileSdk = 34
 
@@ -17,6 +20,21 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+        ndk {
+            abiFilters.add("arm64-v8a")
+            abiFilters.add("x86")
+            abiFilters.add("x86_64")
+            abiFilters.add("armeabi-v7a")
+        }
+        splits {
+            abi {
+                isEnable  = true
+                reset()
+
+                include("x86", "x86_64", "armeabi-v7a", "arm64-v8a")
+                isUniversalApk  = true
+            }
         }
     }
 
@@ -50,6 +68,13 @@ android {
 }
 
 dependencies {
+
+
+    implementation(libs.libraryv)
+    implementation(libs.ffmpeg) // Optional
+    implementation(libs.aria2c) // Optional
+    implementation (libs.rxjava2.rxjava)
+    implementation (libs.rxjava2.rxandroid)
     implementation(project(":network"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -59,6 +84,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.appcompat)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -66,4 +92,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 }
