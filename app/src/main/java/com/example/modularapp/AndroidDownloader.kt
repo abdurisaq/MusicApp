@@ -19,7 +19,7 @@ class AndroidDownloader(
             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "video.mpeg")
         return downloadManager.enqueue(request)
     }
-     fun downloadFile2(url: String,title: String,type:String):Long{
+     override fun downloadFile2(url: String,title: String,type:String):Long{
         if(type == "audio"){
             val request = DownloadManager.Request(url.toUri())
                 .setMimeType("audio/mpeg")

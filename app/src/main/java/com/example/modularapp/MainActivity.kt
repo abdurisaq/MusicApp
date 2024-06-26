@@ -29,6 +29,7 @@ import com.example.network.KtorClient
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -83,10 +84,10 @@ class MainActivity : ComponentActivity() {
 
 
                     Column {
-                        Greeting("Android")
 
-                        DirectDownload(downloader = downloader, permissionGranted =permissionGranted )
-                        SearchYoutube()
+
+                        //DirectDownload(downloader = downloader, permissionGranted =permissionGranted )
+                        SearchYoutube(downloader = downloader, permissionGranted =permissionGranted )
 
                     }
                 }
@@ -194,25 +195,10 @@ fun DirectDownload(downloader: Downloader,permissionGranted:Boolean){
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
 
-//@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ModularAppTheme {
-
-        Greeting("Android")
-    }
-}
 
 @Composable
- fun SearchYoutube(){
+ fun SearchYoutube(downloader: Downloader,permissionGranted:Boolean){
     var videoKeyword by remember { mutableStateOf("")}
     var searches by remember { mutableStateOf<YoutubeResponse?>(null)}
     val ktorClient = KtorClient()
@@ -242,16 +228,16 @@ fun GreetingPreview() {
         }
     }
 
-    ShowResults(searches)
+    ShowResults(searches,downloader,permissionGranted)
 }
 @Composable
-fun ShowResults(response: YoutubeResponse?){
+fun ShowResults(response: YoutubeResponse?,downloader: Downloader,permissionGranted:Boolean){
     ModularAppTheme {
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
             response?.items?.forEach{ item ->
-                DisplayItem(item = item)
+                DisplayItem(item = item,downloader,permissionGranted)
 
             }
 
@@ -261,7 +247,10 @@ fun ShowResults(response: YoutubeResponse?){
 }
 
 @Composable
-fun DisplayItem(item:YoutubeResponseItem){
+fun DisplayItem(item:YoutubeResponseItem,downloader: Downloader,permissionGranted:Boolean){
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+
     Surface (modifier =
     Modifier
         .background(color = Color.Cyan)
@@ -275,13 +264,44 @@ fun DisplayItem(item:YoutubeResponseItem){
 
             )
             Text(text = item.snippet.title
-                //, modifier = Modifier.width()
+                , modifier = Modifier.width(200.dp)
+                    .height(50.dp)
             )
-//            AsyncImage(
-//                model = "https://static.vecteezy.com/system/resources/previews/000/574/204/original/vector-sign-of-download-icon.jpg",
-//                contentDescription = null,
-//                modifier = Modifier.clickable {  }.padding(8.dp)
-//            )
+            AsyncImage(
+                model = "https://static.vecteezy.com/system/resources/previews/000/574/204/original/vector-sign-of-download-icon.jpg",
+                contentDescription = null,
+                modifier = Modifier.clickable {
+                    if (permissionGranted) {
+                        coroutineScope.launch {
+                            Log.d("MainActivity", "Starting download")
+                            val url = "https://www.youtube.com/watch?v=${item.id.videoId}"
+                            val uri = withContext(Dispatchers.IO) {
+                                downloader.downloadFile2(onButtonClick(context,url),item.snippet.title,"video")
+                            }
+                            if (uri != null) {
+                                Toast.makeText(
+                                    context,
+                                    "Download completed",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Download failed",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Permission not granted",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                }.padding(8.dp)
+            )
         }
 
     }
