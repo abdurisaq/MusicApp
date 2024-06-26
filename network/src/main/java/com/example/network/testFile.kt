@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 
 @Composable
 
-fun TestFile(){
-    Text(text = "this is from the network module")
+fun ParseJson(){
+
 
 }

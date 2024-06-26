@@ -69,10 +69,12 @@ android {
 
 dependencies {
 
+    implementation(libs.coil.compose)
 
+    implementation(libs.gson)
     implementation(libs.libraryv)
-    implementation(libs.ffmpeg) // Optional
-    implementation(libs.aria2c) // Optional
+    implementation(libs.ffmpeg)
+    implementation(libs.aria2c)
     implementation (libs.rxjava2.rxjava)
     implementation (libs.rxjava2.rxandroid)
     implementation(project(":network"))
