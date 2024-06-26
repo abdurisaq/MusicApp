@@ -1,8 +1,6 @@
 package com.example.modularapp
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -22,7 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+//import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.example.modularapp.ui.theme.ModularAppTheme
 import com.example.network.KtorClient
@@ -38,8 +36,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.*
@@ -87,7 +83,7 @@ class MainActivity : ComponentActivity() {
                 } else {
                     permissionLauncher.launch(android.Manifest.permission.READ_EXTERNAL_STORAGE)
                 }
-                //ktorClient.searchYoutube("rlcs",Key)
+
             }
 
             ModularAppTheme {
@@ -109,9 +105,9 @@ class MainActivity : ComponentActivity() {
 
 }
 
-private suspend fun onButtonClick(context: Context,url: String): String {
+private fun onButtonClick(context: Context, url: String): String {
     Log.d("MainActivity", "Successfully entered function")
-    var returnUrl: String = ""
+    var returnUrl = ""
     try {
         // Initialize YoutubeDL
         try {
@@ -127,24 +123,19 @@ private suspend fun onButtonClick(context: Context,url: String): String {
         val streamInfo = YoutubeDL.getInstance().getInfo(request)
         println(streamInfo.url)
 
-        if (streamInfo != null) {
-            Log.d("MainActivity", "StreamInfo is not null")
-            if (streamInfo.url != null) {
-                // Direct URL fetched successfully
-                println(streamInfo.url)
-                Log.d("MainActivity", "filesize :: ${streamInfo.fileSize}")
-                val directUrl = streamInfo.url
-                Log.d("MainActivity", "Direct URL: $directUrl")
-                if (directUrl != null) {
-                    returnUrl = directUrl
-                }
-            } else {
-                // URL is null
-                Log.e("MainActivity", "URL is null")
+        Log.d("MainActivity", "StreamInfo is not null")
+        if (streamInfo.url != null) {
+            // Direct URL fetched successfully
+            println(streamInfo.url)
+            Log.d("MainActivity", "fileSize :: ${streamInfo.fileSize}")
+            val directUrl = streamInfo.url
+            Log.d("MainActivity", "Direct URL: $directUrl")
+            if (directUrl != null) {
+                returnUrl = directUrl
             }
         } else {
-            // streamInfo is null
-            Log.e("MainActivity", "streamInfo is null")
+            // URL is null
+            Log.e("MainActivity", "URL is null")
         }
     } catch (e: Exception) {
         // Handle any other exceptions
@@ -153,59 +144,51 @@ private suspend fun onButtonClick(context: Context,url: String): String {
     return returnUrl
 
 }
-@Composable
-fun DirectDownload(downloader: Downloader,permissionGranted:Boolean){
-
-
-    var videoUrl by remember { mutableStateOf("") } // Replace with actual video URL
-
-    val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
-    Row(modifier = Modifier.padding(16.dp)) {
-        TextField(
-            value = videoUrl,
-            onValueChange = { videoUrl = it },
-            label = { Text("Video URL") },
-            placeholder = {Text("URL")},
-            modifier = Modifier.weight(1f)
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Button(
-            onClick = {
-                if (permissionGranted) {
-                    coroutineScope.launch {
-                        Log.d("MainActivity", "Starting download")
-                        val uri = withContext(Dispatchers.IO) {
-                            downloader.downloadFile(onButtonClick(context,videoUrl))
-                        }
-                        if (uri != null) {
-                            Toast.makeText(
-                                context,
-                                "Download completed",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            Toast.makeText(
-                                context,
-                                "Download failed",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                } else {
-                    Toast.makeText(
-                        context,
-                        "Permission not granted",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            },
-            modifier = Modifier.align(Alignment.CenterVertically)
-        ) {
-            Text("Download")
-        }
-    }
-}
+//@Composable
+//fun DirectDownload(downloader: Downloader,permissionGranted:Boolean){
+//
+//
+//    var videoUrl by remember { mutableStateOf("") } // Replace with actual video URL
+//
+//    val coroutineScope = rememberCoroutineScope()
+//    val context = LocalContext.current
+//    Row(modifier = Modifier.padding(16.dp)) {
+//        TextField(
+//            value = videoUrl,
+//            onValueChange = { videoUrl = it },
+//            label = { Text("Video URL") },
+//            placeholder = {Text("URL")},
+//            modifier = Modifier.weight(1f)
+//        )
+//        Spacer(modifier = Modifier.width(8.dp))
+//        Button(
+//            onClick = {
+//                if (permissionGranted) {
+//                    coroutineScope.launch {
+//                        Log.d("MainActivity", "Starting download")
+//                        withContext(Dispatchers.IO) {
+//                            downloader.downloadFile(onButtonClick(context,videoUrl))
+//                        }
+//                        Toast.makeText(
+//                            context,
+//                            "Download completed",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//                } else {
+//                    Toast.makeText(
+//                        context,
+//                        "Permission not granted",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//            },
+//            modifier = Modifier.align(Alignment.CenterVertically)
+//        ) {
+//            Text("Download")
+//        }
+//    }
+//}
 
 
 @Composable
@@ -215,7 +198,7 @@ fun DropDown(selectedDownloadType: String, onDownloadTypeChange: (String) -> Uni
     val choices = listOf("Audio","Video")
     //var selectedText by remember { mutableStateOf("") }
 
-    var textfieldSize by remember { mutableStateOf(Size.Zero)}
+    var textFieldSize by remember { mutableStateOf(Size.Zero)}
 
     val icon = if (expanded)
         Icons.Filled.KeyboardArrowUp
@@ -231,7 +214,7 @@ fun DropDown(selectedDownloadType: String, onDownloadTypeChange: (String) -> Uni
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates ->
                     //This value is used to assign to the DropDown the same width
-                    textfieldSize = coordinates.size.toSize()
+                    textFieldSize = coordinates.size.toSize()
                 },
             label = {Text("Choose Download Type")},
             readOnly = true,
@@ -244,7 +227,7 @@ fun DropDown(selectedDownloadType: String, onDownloadTypeChange: (String) -> Uni
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
-                .width(with(LocalDensity.current){textfieldSize.width.toDp()})
+                .width(with(LocalDensity.current){textFieldSize.width.toDp()})
         ) {
             choices.forEach { label ->
                 DropdownMenuItem(
@@ -264,9 +247,9 @@ fun DropDown(selectedDownloadType: String, onDownloadTypeChange: (String) -> Uni
     var videoKeyword by remember { mutableStateOf("")}
     var searches by remember { mutableStateOf<YoutubeResponse?>(null)}
     val ktorClient = KtorClient()
-    val Key:String = "AIzaSyDo6ohIdPYPd5YaAnwY-f2Wys7C7tUJjTw"
+    val apiKey = "AIzaSyDo6ohIdPYPd5YaAnwY-f2Wys7C7tUJjTw"
     val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
+
     Row (modifier = Modifier.padding(16.dp)){
         TextField(
             value = videoKeyword,
@@ -280,7 +263,7 @@ fun DropDown(selectedDownloadType: String, onDownloadTypeChange: (String) -> Uni
             onClick = {
                 coroutineScope.launch {
                     withContext(Dispatchers.IO){
-                        searches = ktorClient.searchYoutube(videoKeyword,Key)
+                        searches = ktorClient.searchYoutube(videoKeyword,apiKey)
                     }
                 }
                 //Log.d("KtorClient",searches.toString())
@@ -339,7 +322,7 @@ fun DisplayItem(item:YoutubeResponseItem,downloader: Downloader,permissionGrante
                             coroutineScope.launch {
                                 Log.d("MainActivity", "Starting download")
                                 val url = "https://www.youtube.com/watch?v=${item.id.videoId}"
-                                val uri = withContext(Dispatchers.IO) {
+                                withContext(Dispatchers.IO) {
                                     downloader.downloadFile2(
                                         onButtonClick(context, url),
                                         item.snippet.title,
@@ -347,23 +330,13 @@ fun DisplayItem(item:YoutubeResponseItem,downloader: Downloader,permissionGrante
                                     )
                                 }
                                 Log.d("MainActivity",item.snippet.title)
-                                if (uri != null) {
-                                    Toast
-                                        .makeText(
-                                            context,
-                                            "Download completed",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                        .show()
-                                } else {
-                                    Toast
-                                        .makeText(
-                                            context,
-                                            "Download failed",
-                                            Toast.LENGTH_SHORT
-                                        )
-                                        .show()
-                                }
+                                Toast
+                                    .makeText(
+                                        context,
+                                        "Download completed",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                    .show()
                             }
                         } else {
                             Toast

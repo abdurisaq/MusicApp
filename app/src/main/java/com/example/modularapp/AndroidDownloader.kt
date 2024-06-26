@@ -8,7 +8,7 @@ import androidx.core.text.HtmlCompat
 
 
 class AndroidDownloader(
-    private val context: Context
+    context: Context
 ): Downloader {
     private val downloadManager = context.getSystemService(DownloadManager::class.java)
     private fun sanitizeFileName(name: String): String {
@@ -32,7 +32,7 @@ class AndroidDownloader(
      override fun downloadFile2(url: String,title: String,type:String):Long{
          val decodedTitle = decodeHtmlEntities(title)
          val sanitizedTitle = sanitizeFileName(decodedTitle)
-        if(type == "audio"){
+        if(type == "Audio"){
             val request = DownloadManager.Request(url.toUri())
                 .setMimeType("audio/mpeg")
                 .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
