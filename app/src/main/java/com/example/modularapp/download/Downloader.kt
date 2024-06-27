@@ -1,4 +1,4 @@
-package com.example.modularapp
+package com.example.modularapp.download
 
 interface Downloader {
     fun downloadFile(url: String): Long

@@ -46,7 +46,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import androidx.core.text.HtmlCompat
 import coil.compose.AsyncImage
+import com.example.modularapp.download.AndroidDownloader
+import com.example.modularapp.download.Downloader
 import com.example.network.json.YoutubeResponse
 import com.example.network.json.YoutubeResponseItem
 import com.yausername.youtubedl_android.YoutubeDL
@@ -87,6 +90,10 @@ class MainActivity : ComponentActivity() {
             }
 
             ModularAppTheme {
+//                var navController = rememberNavController()
+//                NavHost(navController = navController, startDestination = "home") {
+//
+//                }
                 Surface(modifier = Modifier.fillMaxSize()) {
 
 
@@ -243,7 +250,7 @@ fun DropDown(selectedDownloadType: String, onDownloadTypeChange: (String) -> Uni
 }
 
 @Composable
- fun SearchYoutube(downloader: Downloader,permissionGranted:Boolean,selectedDownloadType: String){
+ fun SearchYoutube(downloader: Downloader, permissionGranted:Boolean, selectedDownloadType: String){
     var videoKeyword by remember { mutableStateOf("")}
     var searches by remember { mutableStateOf<YoutubeResponse?>(null)}
     val ktorClient = KtorClient()
@@ -276,7 +283,7 @@ fun DropDown(selectedDownloadType: String, onDownloadTypeChange: (String) -> Uni
     ShowResults(searches,downloader,permissionGranted,selectedDownloadType)
 }
 @Composable
-fun ShowResults(response: YoutubeResponse?,downloader: Downloader,permissionGranted:Boolean,selectedDownloadType: String){
+fun ShowResults(response: YoutubeResponse?, downloader: Downloader, permissionGranted:Boolean, selectedDownloadType: String){
     ModularAppTheme {
         Column(
             modifier = Modifier.verticalScroll(rememberScrollState())
@@ -292,10 +299,21 @@ fun ShowResults(response: YoutubeResponse?,downloader: Downloader,permissionGran
 }
 
 @Composable
-fun DisplayItem(item:YoutubeResponseItem,downloader: Downloader,permissionGranted:Boolean,selectedDownloadType: String){
+fun DisplayItem(item:YoutubeResponseItem, downloader: Downloader, permissionGranted:Boolean, selectedDownloadType: String){
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+    fun sanitizeFileName(name: String): String {
+        var sanitized = name.replace("[^a-zA-Z0-9.-]".toRegex(), "_")
+        // Replace multiple consecutive underscores with a single underscore
+        sanitized = sanitized.replace("_+".toRegex(), "_")
+        return sanitized.replace("_"," ")
+    }
 
+    fun decodeHtmlEntities(html: String): String {
+        return HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
+    }
+    val decodedTitle = decodeHtmlEntities(item.snippet.title)
+    val sanitizedTitle = sanitizeFileName(decodedTitle)
     Surface (modifier =
     Modifier
         .background(color = Color.Cyan)
@@ -308,14 +326,14 @@ fun DisplayItem(item:YoutubeResponseItem,downloader: Downloader,permissionGrante
                 contentDescription = null,
 
             )
-            Text(text = item.snippet.title
+            Text(text = sanitizedTitle
                 , modifier = Modifier
                     .width(200.dp)
                     .height(50.dp)
             )
             AsyncImage(
                 model = "https://static.vecteezy.com/system/resources/previews/000/574/204/original/vector-sign-of-download-icon.jpg",
-                contentDescription = null,
+                contentDescription = null, // add changing this to a loading image while the video is being processed, so user knows something is happening
                 modifier = Modifier
                     .clickable {
                         if (permissionGranted) {
@@ -329,7 +347,7 @@ fun DisplayItem(item:YoutubeResponseItem,downloader: Downloader,permissionGrante
                                         selectedDownloadType
                                     )
                                 }
-                                Log.d("MainActivity",item.snippet.title)
+                                Log.d("MainActivity", item.snippet.title)
                                 Toast
                                     .makeText(
                                         context,

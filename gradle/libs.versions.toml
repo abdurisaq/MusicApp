@@ -17,12 +17,17 @@ composeBom = "2024.06.00"
 appcompat = "1.7.0"
 material = "1.12.0"
 ktor = "2.3.11"
+media3 = "1.3.1"
+
+navigationCompose = "2.7.7"
 rxandroidVersion = "2.1.1"
 rxjavaVersion = "2.2.21"
 appcompatVersion = "1.7.0"
 firebaseCrashlyticsBuildtools = "3.0.2"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 aria2c = { module = "com.github.yausername.youtubedl-android:aria2c", version.ref = "aria" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 ffmpeg = { module = "com.github.yausername.youtubedl-android:ffmpeg", version.ref = "ffmpeg" }
@@ -48,6 +53,12 @@ ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "kto
 ktor-client-content-negotiation = {module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = {module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-logging = {module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+
+media3-datasource-okhttp = { module = "androidx.media3:media3-datasource-okhttp", version.ref = "media3" }
+media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
+media3-session = { module = "androidx.media3:media3-session", version.ref = "media3" }
+media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
+
 rxjava2-rxandroid = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rxandroidVersion" }
 rxjava2-rxjava = { module = "io.reactivex.rxjava2:rxjava", version.ref = "rxjavaVersion" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompatVersion" }

@@ -1,4 +1,4 @@
-package com.example.modularapp
+package com.example.modularapp.download
 
 import android.app.DownloadManager
 import android.content.BroadcastReceiver
