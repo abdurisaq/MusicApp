@@ -34,10 +34,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -47,9 +52,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.core.text.HtmlCompat
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.modularapp.download.AndroidDownloader
 import com.example.modularapp.download.Downloader
+import com.example.modularapp.navBar.BottomNavigationBar
+import com.example.modularapp.navBar.items
 import com.example.network.json.YoutubeResponse
 import com.example.network.json.YoutubeResponseItem
 import com.yausername.youtubedl_android.YoutubeDL
@@ -58,6 +68,7 @@ import com.yausername.youtubedl_android.YoutubeDLRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
 
 class MainActivity : ComponentActivity() {
 
@@ -68,9 +79,10 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             var permissionGranted by remember { mutableStateOf(false) }
-            var selectedDownloadType by remember { mutableStateOf("") }
+            var selectedDownloadType by remember { mutableStateOf("Video") }
             val context = LocalContext.current
-
+            var selectedNavItemIndex by remember { mutableStateOf(0) }
+            val navController = rememberNavController()
 
             val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
                 permissionGranted = granted
@@ -90,27 +102,109 @@ class MainActivity : ComponentActivity() {
             }
 
             ModularAppTheme {
-//                var navController = rememberNavController()
-//                NavHost(navController = navController, startDestination = "home") {
-//
-//                }
-                Surface(modifier = Modifier.fillMaxSize()) {
+                Scaffold(
 
+                    bottomBar = {
+                        NavigationBar {
+                            items.forEachIndexed { index, item ->
+                                NavigationBarItem(
+                                    selected = selectedNavItemIndex == index,
+                                    onClick = { selectedNavItemIndex = index
+                                        when (index) {
+                                            0 -> navController.navigate(SongScreen)
+                                            1 -> navController.navigate(PlaylistScreen)
+                                            2 -> navController.navigate(SearchScreen)
+                                            3 -> navController.navigate(SettingScreen)
+                                        }},
+                                    label = { Text(text = item.title) },
+                                    icon = {
+                                        BadgedBox(badge = {
+                                            when {
+                                                item.badgeCount != null -> {
+                                                    Badge { Text(text = item.badgeCount.toString()) }
+                                                }
+                                                item.hasNews -> {
+                                                    Badge()
+                                                }
+                                            }
+                                        }) {
+                                            Icon(
+                                                imageVector = if (index == selectedNavItemIndex) {
+                                                    item.selectedIcon
+                                                } else {
+                                                    item.unselectedIcon
+                                                },
+                                                contentDescription = item.title
+                                            )
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    },
+                    content = { innerPadding ->
+                        Box(modifier = Modifier
+                            .padding(innerPadding)
+                            .fillMaxSize()){
+                            NavHost(navController = navController, startDestination = SongScreen) {
+                                composable<SongScreen>{
+                                    Text(text = "SongScreen")
+                                }
+                                composable<PlaylistScreen>{
+                                    Text(text = "PlaylistScreen")
+                                }
+                                composable<SearchScreen>{
+                                    Column {
+                                        DropDown(selectedDownloadType, onDownloadTypeChange = { selectedDownloadType = it })
+                                        SearchYoutube(downloader = downloader, permissionGranted =permissionGranted,selectedDownloadType )
 
-                    Column {
+                                    }
 
+                                }
+                                composable<SettingScreen>{
+                                    Text(text = "SettingScreen")
+                                }
 
-                        //DirectDownload(downloader = downloader, permissionGranted =permissionGranted )
-                        DropDown(selectedDownloadType, onDownloadTypeChange = { selectedDownloadType = it })
-                        SearchYoutube(downloader = downloader, permissionGranted =permissionGranted,selectedDownloadType )
-
+                            }
+                        }
                     }
-                }
+                )
+
+
+
+//                Surface(modifier = Modifier.fillMaxSize()) {
+//
+//
+//                    Column {
+//
+//
+//                        //DirectDownload(downloader = downloader, permissionGranted =permissionGranted )
+//                        DropDown(selectedDownloadType, onDownloadTypeChange = { selectedDownloadType = it })
+//                        SearchYoutube(downloader = downloader, permissionGranted =permissionGranted,selectedDownloadType )
+//                        BottomNavigationBar(
+//                            items = items,
+//                            selectedItemIndex = selectedNavItemIndex,
+//                            onItemSelected = { index -> selectedNavItemIndex = index }
+//                        )
+//                    }
+//                }
             }
             }
         }
 
 }
+
+@Serializable
+object SongScreen
+
+@Serializable
+object PlaylistScreen
+
+@Serializable
+object SearchScreen
+
+@Serializable
+object SettingScreen
 
 private fun onButtonClick(context: Context, url: String): String {
     Log.d("MainActivity", "Successfully entered function")

@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-
+    id("kotlinx-serialization")
 }
 
 
@@ -69,21 +69,24 @@ android {
 
 dependencies {
 
+    implementation(libs.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 
+    implementation(libs.javax.inject)
     implementation(libs.media3.datasource.okhttp)
     implementation(libs.media3.exoplayer)
     implementation(libs.media3.ui)
     implementation(libs.media3.session)
 
 
-    implementation(libs.androidx.navigation.compose)
+
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.coil.compose)
 
     implementation(libs.gson)
     implementation(libs.libraryv)
     implementation(libs.ffmpeg)
-    implementation(libs.aria2c)
+    //implementation(libs.aria2c)
     implementation (libs.rxjava2.rxjava)
     implementation (libs.rxjava2.rxandroid)
     implementation(project(":network"))
