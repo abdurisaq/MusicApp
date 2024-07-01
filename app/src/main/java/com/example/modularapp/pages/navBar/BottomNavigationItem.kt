@@ -1,4 +1,4 @@
-package com.example.modularapp.navBar
+package com.example.modularapp.pages.navBar
 
 
 import androidx.compose.material.icons.Icons
