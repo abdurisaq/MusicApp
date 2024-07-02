@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
                         BottomNavigationBar(items,selectedNavItemIndex,onItemSelected = { item -> selectedNavItemIndex = item},navController)
                     },
                     content = { innerPadding ->
-                        ContentPages(innerPadding,navController,permissionGranted,downloader,selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type})
+                        ContentPages(innerPadding,navController,permissionGranted,downloader,selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type},viewModel)
                     }
                 )
             }

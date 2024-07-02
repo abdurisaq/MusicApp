@@ -6,6 +6,7 @@ gson = "2.11.0"
 javaxInject = "1"
 library = "42c7dfcee1"
 #aria = "-SNAPSHOT"
+#noinspection GradleDependency
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -28,7 +29,11 @@ rxandroidVersion = "2.1.1"
 rxjavaVersion = "2.2.21"
 appcompatVersion = "1.7.0"
 firebaseCrashlyticsBuildtools = "3.0.2"
+hiltCompiler = "1.2.0"
 [libraries]
+
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltCompiler" }
+
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx" }
 

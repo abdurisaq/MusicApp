@@ -27,7 +27,7 @@ fun ContentPages(
     downloader: AndroidDownloader,
     selectedDownloadType: String,
     onTypeSelected: (String) -> Unit,
-    //viewModel: MainViewModel
+    viewModel: MainViewModel
 ){
 
 
@@ -39,8 +39,8 @@ fun ContentPages(
                 Text(text = "SongScreen")
             }
             composable<PlaylistScreen>{
-                Text(text = "PlaylistScreen")
-                //VideoPlayer(viewModel)
+                //Text(text = "PlaylistScreen")
+                VideoPlayer(viewModel)
             }
             composable<SearchScreen>{
                 Column {
@@ -71,3 +71,4 @@ object SearchScreen
 
 @Serializable
 object SettingScreen
+

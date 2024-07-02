@@ -1,7 +1,10 @@
 plugins {
+
+    id ("kotlin-android")
+    alias(libs.plugins.kotlin.serialization)
+    kotlin("kapt")
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    id("kotlinx-serialization")
 }
 
 
@@ -68,6 +71,8 @@ android {
 }
 
 dependencies {
+
+    implementation (libs.androidx.hilt.navigation.compose)
 
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
