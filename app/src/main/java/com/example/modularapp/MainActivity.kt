@@ -18,6 +18,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.platform.LocalContext
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.compose.rememberNavController
+import com.example.modularapp.audioplaying.AudioPlayerApp
+import com.example.modularapp.audioplaying.MainViewModel2
 import com.example.modularapp.download.AndroidDownloader
 import com.example.modularapp.pages.content.ContentPages
 import com.example.modularapp.pages.navBar.BottomNavigationBar
@@ -25,6 +27,7 @@ import com.example.modularapp.pages.navBar.items
 import com.example.modularapp.videoplaying.MainViewModel
 import com.example.modularapp.videoplaying.VideoPlayerApp
 import com.example.modularapp.videoplaying.ViewModelFactory
+import com.example.modularapp.audioplaying.ViewModelFactory2
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +55,13 @@ class MainActivity : ComponentActivity() {
                     metaDataReader =VideoPlayerApp.appModule.metaDataReader
                 )
             }
+            val viewModel2: MainViewModel2 by viewModels {
+                ViewModelFactory2(
+                    this,
+                    player = AudioPlayerApp.appModule.audioPlayer ,
+                    metaDataReader =AudioPlayerApp.appModule.metaDataReader
+                )
+            }
             LaunchedEffect(Unit) {
                 // Request the required permissions
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -71,7 +81,7 @@ class MainActivity : ComponentActivity() {
                         BottomNavigationBar(items,selectedNavItemIndex,onItemSelected = { item -> selectedNavItemIndex = item},navController)
                     },
                     content = { innerPadding ->
-                        ContentPages(innerPadding,navController,permissionGranted,downloader,selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type})
+                        ContentPages(innerPadding,navController,permissionGranted,downloader,selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type},viewModel2)
                     }
                 )
             }
