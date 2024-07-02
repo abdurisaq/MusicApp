@@ -11,9 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.modularapp.audioplaying.MainViewModel2
 import com.example.modularapp.pages.content.search.DropDown
 import com.example.modularapp.pages.content.search.SearchYoutube
 import com.example.modularapp.download.AndroidDownloader
+import com.example.modularapp.pages.content.playing.AudioPlayer
 import com.example.modularapp.pages.content.playing.VideoPlayer
 import com.example.modularapp.videoplaying.MainViewModel
 import kotlinx.serialization.Serializable
@@ -27,7 +29,8 @@ fun ContentPages(
     downloader: AndroidDownloader,
     selectedDownloadType: String,
     onTypeSelected: (String) -> Unit,
-    //viewModel: MainViewModel
+    //viewModel: MainViewModel,
+    viewModel2: MainViewModel2
 ){
 
 
@@ -50,7 +53,8 @@ fun ContentPages(
                 }
             }
             composable<SettingScreen>{
-                Text(text = "SettingScreen")
+                //Text(text = "SettingScreen")
+                AudioPlayer(viewModel = viewModel2)
             }
 
         }
@@ -71,3 +75,4 @@ object SearchScreen
 
 @Serializable
 object SettingScreen
+

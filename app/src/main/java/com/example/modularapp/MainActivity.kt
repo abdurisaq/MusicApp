@@ -1,5 +1,6 @@
 package com.example.modularapp
 
+
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -16,10 +17,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.platform.LocalContext
-import androidx.media3.exoplayer.ExoPlayer
+
 import androidx.navigation.compose.rememberNavController
+import com.example.modularapp.audioplaying.AudioPlayerApp
+import com.example.modularapp.audioplaying.MainViewModel2
+import com.example.modularapp.audioplaying.ViewModelFactory2
 import com.example.modularapp.download.AndroidDownloader
 import com.example.modularapp.pages.content.ContentPages
+import com.example.modularapp.pages.content.playing.AudioPlayer
+
 import com.example.modularapp.pages.navBar.BottomNavigationBar
 import com.example.modularapp.pages.navBar.items
 import com.example.modularapp.videoplaying.MainViewModel
@@ -45,11 +51,18 @@ class MainActivity : ComponentActivity() {
                     Toast.makeText(context, "Permission not granted", Toast.LENGTH_SHORT).show()
                 }
             }
-            val viewModel: MainViewModel by viewModels {
-                ViewModelFactory(
+//            val viewModel: MainViewModel by viewModels {
+//                ViewModelFactory(
+//                    this,
+//                    player = VideoPlayerApp.appModule.videoPlayer,
+//                    metaDataReader =VideoPlayerApp.appModule.metaDataReader
+//                )
+//            }
+            val viewModel2: MainViewModel2 by viewModels {
+                ViewModelFactory2(
                     this,
-                    player = VideoPlayerApp.appModule.videoPlayer,
-                    metaDataReader =VideoPlayerApp.appModule.metaDataReader
+                    player = AudioPlayerApp.appModule.audioPlayer,
+                    metaDataReader =AudioPlayerApp.appModule.metaDataReader
                 )
             }
             LaunchedEffect(Unit) {
@@ -64,18 +77,23 @@ class MainActivity : ComponentActivity() {
             //val player = ExoPlayer.Builder(context).build()
             ModularAppTheme {
 
-
+                AudioPlayer(viewModel = viewModel2)
+               // val audioUri = Uri.parse("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3")
+                //AudioPlayer2(uri = audioUri)
                 Scaffold(
 
                     bottomBar = {
                         BottomNavigationBar(items,selectedNavItemIndex,onItemSelected = { item -> selectedNavItemIndex = item},navController)
                     },
                     content = { innerPadding ->
-                        ContentPages(innerPadding,navController,permissionGranted,downloader,selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type})
+                        ContentPages(innerPadding,navController,permissionGranted,downloader,selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type},viewModel2)//,viewModel2
                     }
                 )
             }
         }
     }
 }
+
+
+
 
