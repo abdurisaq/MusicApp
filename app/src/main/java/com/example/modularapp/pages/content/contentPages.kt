@@ -14,6 +14,8 @@ import androidx.navigation.compose.composable
 import com.example.modularapp.pages.content.search.DropDown
 import com.example.modularapp.pages.content.search.SearchYoutube
 import com.example.modularapp.download.AndroidDownloader
+import com.example.modularapp.pages.content.playing.VideoPlayer
+import com.example.modularapp.videoplaying.MainViewModel
 import kotlinx.serialization.Serializable
 
 @Composable
@@ -25,6 +27,7 @@ fun ContentPages(
     downloader: AndroidDownloader,
     selectedDownloadType: String,
     onTypeSelected: (String) -> Unit,
+    //viewModel: MainViewModel
 ){
 
 
@@ -37,6 +40,7 @@ fun ContentPages(
             }
             composable<PlaylistScreen>{
                 Text(text = "PlaylistScreen")
+                //VideoPlayer(viewModel)
             }
             composable<SearchScreen>{
                 Column {

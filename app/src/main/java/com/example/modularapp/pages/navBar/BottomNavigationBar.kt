@@ -9,12 +9,15 @@ import com.example.modularapp.pages.content.PlaylistScreen
 import com.example.modularapp.pages.content.SearchScreen
 import com.example.modularapp.pages.content.SettingScreen
 import com.example.modularapp.pages.content.SongScreen
+import com.example.modularapp.videoplaying.MainViewModel
+
 @Composable
 fun BottomNavigationBar(
     items: List<BottomNavigationItem>,
     selectedItemIndex: Int,
     onItemSelected: (Int) -> Unit,
-    navController: NavController
+    navController: NavController,
+    //viewModel: MainViewModel
 ) {
     NavigationBar {
         items.forEachIndexed { index, item ->

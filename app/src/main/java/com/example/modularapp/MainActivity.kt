@@ -13,6 +13,7 @@ import androidx.compose.runtime.setValue
 import com.example.modularapp.ui.theme.ModularAppTheme
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.platform.LocalContext
 import androidx.media3.exoplayer.ExoPlayer
@@ -21,6 +22,9 @@ import com.example.modularapp.download.AndroidDownloader
 import com.example.modularapp.pages.content.ContentPages
 import com.example.modularapp.pages.navBar.BottomNavigationBar
 import com.example.modularapp.pages.navBar.items
+import com.example.modularapp.videoplaying.MainViewModel
+import com.example.modularapp.videoplaying.VideoPlayerApp
+import com.example.modularapp.videoplaying.ViewModelFactory
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +45,13 @@ class MainActivity : ComponentActivity() {
                     Toast.makeText(context, "Permission not granted", Toast.LENGTH_SHORT).show()
                 }
             }
-
+            val viewModel: MainViewModel by viewModels {
+                ViewModelFactory(
+                    this,
+                    player = VideoPlayerApp.appModule.videoPlayer,
+                    metaDataReader =VideoPlayerApp.appModule.metaDataReader
+                )
+            }
             LaunchedEffect(Unit) {
                 // Request the required permissions
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
