@@ -2,6 +2,7 @@ package com.example.modularapp
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -72,6 +73,7 @@ class MainActivity : ComponentActivity() {
 
             }
             //val player = ExoPlayer.Builder(context).build()
+
             ModularAppTheme {
 
 

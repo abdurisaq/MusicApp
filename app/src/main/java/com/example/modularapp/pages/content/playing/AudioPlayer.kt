@@ -56,7 +56,11 @@ fun AudioPlayer(viewModel: MainViewModel2) {
                         }
                         .padding(16.dp)
                 )
+                Text(text = millisecondsToMinuteAndSeconds(item.duration))
+                Text(text = item.artist)
+
             }
         }
+        AudioController(player =viewModel.player)
     }
 }

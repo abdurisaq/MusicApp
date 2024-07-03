@@ -25,7 +25,9 @@ class MainViewModel2 (
         AudioItem(
             content = uri,
             mediaItem = MediaItem.fromUri(uri),
-            name = metaDataReader.getMetaDataFromUri(uri)?.fileName?: "No name"
+            name = metaDataReader.getMetaDataFromUri(uri)?.fileName?: "No name",
+            duration = metaDataReader.getMetaDataFromUri(uri)?.duration?: 999,
+            artist = metaDataReader.getMetaDataFromUri(uri)?.artist?: "No name"
         )
     }}.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
     init {
@@ -44,5 +46,6 @@ class MainViewModel2 (
     override fun onCleared() {
         player.release()
     }
+
 
 }

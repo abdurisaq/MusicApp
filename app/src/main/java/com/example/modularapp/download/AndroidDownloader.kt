@@ -39,6 +39,7 @@ class AndroidDownloader(
                 .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                 .setTitle(sanitizedTitle)
                 .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "$sanitizedTitle.mpeg")
+
             return downloadManager.enqueue(request)
         }
          val request = DownloadManager.Request(url.toUri())
