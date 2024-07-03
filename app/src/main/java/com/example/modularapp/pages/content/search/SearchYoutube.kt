@@ -90,6 +90,10 @@ fun ShowResults(response: YoutubeResponse?, downloader: Downloader, permissionGr
 fun DisplayItem(item: YoutubeResponseItem, downloader: Downloader, permissionGranted:Boolean, selectedDownloadType: String){
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+    val TAG = "MainActivity"
+    var downloading by remember {
+        mutableStateOf(false)
+    }
     fun sanitizeFileName(name: String): String {
         var sanitized = name.replace("[^a-zA-Z0-9.-]".toRegex(), "_")
         // Replace multiple consecutive underscores with a single underscore
@@ -104,7 +108,7 @@ fun DisplayItem(item: YoutubeResponseItem, downloader: Downloader, permissionGra
     val sanitizedTitle = sanitizeFileName(decodedTitle)
     Surface (modifier =
     Modifier
-        .background(color = Color.Cyan)
+        .background(color = Color.Gray)
         .padding(10.dp)
 
     ){
@@ -119,44 +123,56 @@ fun DisplayItem(item: YoutubeResponseItem, downloader: Downloader, permissionGra
                     .width(200.dp)
                     .height(50.dp)
             )
-            AsyncImage(
-                model = "https://static.vecteezy.com/system/resources/previews/000/574/204/original/vector-sign-of-download-icon.jpg",
-                contentDescription = null, // add changing this to a loading image while the video is being processed, so user knows something is happening
-                modifier = Modifier
-                    .clickable {
-                        if (permissionGranted) {
-                            coroutineScope.launch {
-                                Log.d("MainActivity", "Starting download")
-                                val url = "https://www.youtube.com/watch?v=${item.id.videoId}"
-                                withContext(Dispatchers.IO) {
-                                    downloader.downloadFile2(
-                                        downloadFile(context, url),
-                                        item.snippet.title,
-                                        selectedDownloadType
-                                    )
+            if (downloading){
+                AsyncImage(
+                    model = "https://static.vecteezy.com/system/resources/thumbnails/008/202/375/original/loading-circle-icon-loading-gif-loading-screen-gif-loading-spinner-gif-loading-animation-loading-free-video.jpg",
+                    contentDescription = null,
+
+                    )
+            }else{
+
+                AsyncImage(
+                    model = "https://static.vecteezy.com/system/resources/previews/000/574/204/original/vector-sign-of-download-icon.jpg",
+                    contentDescription = null, // add changing this to a loading image while the video is being processed, so user knows something is happening
+                    modifier = Modifier
+                        .clickable {
+                            if (permissionGranted) {
+                                coroutineScope.launch {
+                                    Log.d("MainActivity", "Starting download")
+                                    val url = "https://www.youtube.com/watch?v=${item.id.videoId}"
+                                    Log.d(TAG, "started download for${item.snippet.title}")
+                                    withContext(Dispatchers.IO) {
+                                        downloading = true
+                                        downloader.downloadFile2(
+                                            downloadFile(context, url),
+                                            item.snippet.title,
+                                            selectedDownloadType
+                                        )
+                                        downloading = false
+                                    }
+                                    Log.d(TAG, "finished download for${item.snippet.title}")
+                                    Toast
+                                        .makeText(
+                                            context,
+                                            "Download completed",
+                                            Toast.LENGTH_SHORT
+                                        )
+                                        .show()
                                 }
-                                Log.d("MainActivity", item.snippet.title)
+                            } else {
                                 Toast
                                     .makeText(
                                         context,
-                                        "Download completed",
+                                        "Permission not granted",
                                         Toast.LENGTH_SHORT
                                     )
                                     .show()
                             }
-                        } else {
-                            Toast
-                                .makeText(
-                                    context,
-                                    "Permission not granted",
-                                    Toast.LENGTH_SHORT
-                                )
-                                .show()
-                        }
 
-                    }
-                    .padding(8.dp)
-            )
+                        }
+                        .padding(8.dp)
+                )
+            }
         }
 
     }
