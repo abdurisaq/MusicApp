@@ -4,6 +4,7 @@ package com.example.modularapp.pages.navBar
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
+import com.example.modularapp.pages.content.DirectDownloadScreen
 import kotlinx.serialization.Serializable
 import com.example.modularapp.pages.content.PlaylistScreen
 import com.example.modularapp.pages.content.SearchScreen
@@ -28,7 +29,8 @@ fun BottomNavigationBar(
                         0 -> navController.navigate(SongScreen)
                         1 -> navController.navigate(PlaylistScreen)
                         2 -> navController.navigate(SearchScreen)
-                        3 -> navController.navigate(SettingScreen)
+                        3 -> navController.navigate(DirectDownloadScreen)
+                        4 -> navController.navigate(SettingScreen)
                     } },
                 label = { Text(text = item.title) },
                 icon = {

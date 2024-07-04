@@ -42,7 +42,7 @@ fun SearchYoutube(downloader: Downloader, permissionGranted:Boolean, selectedDow
     var videoKeyword by remember { mutableStateOf("") }
     var searches by remember { mutableStateOf<YoutubeResponse?>(null) }
     val ktorClient = KtorClient()
-    val apiKey = "AIzaSyDo6ohIdPYPd5YaAnwY-f2Wys7C7tUJjTw"
+    val apiKey = "AIzaSyAMJ3YNP8xvUh4awXIOn9o2M-3mPUklyIU"
     val coroutineScope = rememberCoroutineScope()
 
     Row (modifier = Modifier.padding(16.dp)){

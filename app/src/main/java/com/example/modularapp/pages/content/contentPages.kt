@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,6 +18,7 @@ import com.example.modularapp.pages.content.search.SearchYoutube
 import com.example.modularapp.download.AndroidDownloader
 import com.example.modularapp.pages.content.playing.AudioPlayer
 import com.example.modularapp.pages.content.playing.VideoPlayer
+import com.example.modularapp.pages.content.search.DirectDownload
 import com.example.modularapp.videoplaying.MainViewModel
 import kotlinx.serialization.Serializable
 
@@ -47,10 +49,19 @@ fun ContentPages(
             }
             composable<SearchScreen>{
                 Column {
+
                     DropDown(selectedDownloadType, onDownloadTypeChange = { onTypeSelected(it) })
                     SearchYoutube(downloader = downloader, permissionGranted =permissionGranted,selectedDownloadType )
 
                 }
+
+            }
+            composable<DirectDownloadScreen> {
+                Column {
+                    DirectDownload(downloader,permissionGranted)
+
+                }
+
             }
             composable<SettingScreen>{
                 //Text(text = "SettingScreen")
@@ -73,5 +84,7 @@ object PlaylistScreen
 @Serializable
 object SearchScreen
 
+@Serializable
+object DirectDownloadScreen
 @Serializable
 object SettingScreen

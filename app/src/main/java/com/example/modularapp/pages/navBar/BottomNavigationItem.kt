@@ -31,6 +31,11 @@ val items = listOf(
         unselectedIcon = Icons.Outlined.Search
     ),
     BottomNavigationItem(
+        title = "download",
+        selectedIcon = Icons.Filled.Download,
+        unselectedIcon = Icons.Outlined.Download
+    ),
+    BottomNavigationItem(
         title = "settings",
         selectedIcon = Icons.Filled.Settings,
         unselectedIcon = Icons.Outlined.Settings,

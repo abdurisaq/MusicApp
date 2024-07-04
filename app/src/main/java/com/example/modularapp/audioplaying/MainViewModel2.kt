@@ -43,6 +43,7 @@ class MainViewModel2 (
         )
     }
 
+
     override fun onCleared() {
         player.release()
     }
