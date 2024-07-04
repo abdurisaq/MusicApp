@@ -1,3 +1,6 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
 
     id ("kotlin-android")
@@ -5,6 +8,7 @@ plugins {
     kotlin("kapt")
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 
@@ -21,6 +25,15 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val properties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            properties.load(FileInputStream(localPropertiesFile))
+        }
+        val apiKey = properties.getProperty("apiKey") ?: "default_api_key"
+
+        buildConfigField("String","API_KEY", apiKey)
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -59,6 +72,8 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
+
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"

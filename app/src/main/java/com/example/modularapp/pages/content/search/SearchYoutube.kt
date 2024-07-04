@@ -35,14 +35,14 @@ import com.example.network.json.YoutubeResponseItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
+import com.example.modularapp.BuildConfig
 
 @Composable
 fun SearchYoutube(downloader: Downloader, permissionGranted:Boolean, selectedDownloadType: String){
     var videoKeyword by remember { mutableStateOf("") }
     var searches by remember { mutableStateOf<YoutubeResponse?>(null) }
     val ktorClient = KtorClient()
-    val apiKey = "AIzaSyAMJ3YNP8xvUh4awXIOn9o2M-3mPUklyIU"
+    val apiKey =BuildConfig.API_KEY
     val coroutineScope = rememberCoroutineScope()
 
     Row (modifier = Modifier.padding(16.dp)){
