@@ -9,6 +9,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+
+
 }
 
 
@@ -86,6 +88,9 @@ android {
 }
 
 dependencies {
+
+    implementation (libs.androidx.room.ktx)
+    kapt (libs.androidx.room.compiler)//figure out how to change this to use ksp later, was getting build errors so reverted
 
     implementation (libs.androidx.hilt.navigation.compose)
 

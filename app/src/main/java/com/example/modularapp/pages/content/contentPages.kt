@@ -17,12 +17,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.modularapp.audioplaying.MainViewModel2
+import com.example.modularapp.audioplaying.data.SongState
 import com.example.modularapp.audioplaying.services.AudioService
 import com.example.modularapp.pages.content.search.DropDown
 import com.example.modularapp.pages.content.search.SearchYoutube
 import com.example.modularapp.download.AndroidDownloader
 import com.example.modularapp.pages.content.playing.AudioPlayer
 import com.example.modularapp.pages.content.search.DirectDownload
+import com.example.modularapp.pages.content.songs.SongEvent
+import com.example.modularapp.pages.content.songs.SongScreen
 import kotlinx.serialization.Serializable
 
 @Composable
@@ -35,7 +38,9 @@ fun ContentPages(
     selectedDownloadType: String,
     onTypeSelected: (String) -> Unit,
     //viewModel: MainViewModel,
-    viewModel2: MainViewModel2
+    viewModel2: MainViewModel2,
+    state: SongState,
+    onEvent: (SongEvent) ->Unit
 ){
     val context = LocalContext.current
 
@@ -44,7 +49,8 @@ fun ContentPages(
         .fillMaxSize()){
         NavHost(navController = navController, startDestination = SongScreen) {
             composable<SongScreen>{
-                Text(text = "SongScreen")
+                //Text(text = "SongScreen")
+                SongScreen(state,onEvent,innerPadding)
             }
             composable<PlaylistScreen>{
 //                Text(text = "PlaylistScreen")

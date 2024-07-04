@@ -16,12 +16,19 @@ import com.example.modularapp.ui.theme.ModularAppTheme
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.room.Room
 import com.example.modularapp.audioplaying.AudioPlayerApp
 import com.example.modularapp.audioplaying.MainViewModel2
+import com.example.modularapp.audioplaying.SongViewModelFactory
 import com.example.modularapp.download.AndroidDownloader
 import com.example.modularapp.pages.content.ContentPages
 import com.example.modularapp.pages.navBar.BottomNavigationBar
@@ -30,7 +37,20 @@ import com.example.modularapp.pages.navBar.items
 //import com.example.modularapp.videoplaying.VideoPlayerApp
 //import com.example.modularapp.videoplaying.ViewModelFactory
 import com.example.modularapp.audioplaying.ViewModelFactory2
+import com.example.modularapp.audioplaying.data.SongDatabases
+import com.example.modularapp.pages.content.PlaylistScreen
+import com.example.modularapp.pages.content.SongScreen
+import com.example.modularapp.pages.content.songs.FloatingButton
+import com.example.modularapp.pages.content.songs.SongViewModel
+
 class MainActivity : ComponentActivity() {
+    private val db by lazy {
+        Room.databaseBuilder(
+            applicationContext,
+            SongDatabases::class.java,
+            "songs.db"
+        ).build()
+    }
 
     @SuppressLint("AutoboxingStateCreation")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,6 +92,13 @@ class MainActivity : ComponentActivity() {
                     metaDataReader =AudioPlayerApp.appModule.metaDataReader
                 )
             }
+            val songViewModel: SongViewModel by viewModels {
+                SongViewModelFactory(db.dao)
+            }
+            val state by songViewModel.state.collectAsState()
+            val currentBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = currentBackStackEntry?.destination?.route
+
             LaunchedEffect(Unit) {
                 // Request the required permissions
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -90,8 +117,14 @@ class MainActivity : ComponentActivity() {
                     bottomBar = {
                         BottomNavigationBar(items,selectedNavItemIndex,onItemSelected = { item -> selectedNavItemIndex = item},navController)
                     },
+                    floatingActionButton = {
+                        if (currentDestination == SongScreen::class.java.name) {
+                            FloatingButton(songViewModel::onEvent)
+                        }
+                    },
+                    modifier = Modifier.padding(16.dp),
                     content = { innerPadding ->
-                        ContentPages(innerPadding,navController,permissionGranted,downloader,selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type},viewModel2)
+                        ContentPages(innerPadding,navController,permissionGranted,downloader,selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type},viewModel2,state , songViewModel::onEvent)
                     }
                 )
             }
