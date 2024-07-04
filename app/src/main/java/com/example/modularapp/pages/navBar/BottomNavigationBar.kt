@@ -5,12 +5,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.example.modularapp.pages.content.DirectDownloadScreen
-import kotlinx.serialization.Serializable
 import com.example.modularapp.pages.content.PlaylistScreen
 import com.example.modularapp.pages.content.SearchScreen
 import com.example.modularapp.pages.content.SettingScreen
 import com.example.modularapp.pages.content.SongScreen
-import com.example.modularapp.videoplaying.MainViewModel
 
 @Composable
 fun BottomNavigationBar(

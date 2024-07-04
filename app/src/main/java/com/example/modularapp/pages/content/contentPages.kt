@@ -22,9 +22,7 @@ import com.example.modularapp.pages.content.search.DropDown
 import com.example.modularapp.pages.content.search.SearchYoutube
 import com.example.modularapp.download.AndroidDownloader
 import com.example.modularapp.pages.content.playing.AudioPlayer
-import com.example.modularapp.pages.content.playing.VideoPlayer
 import com.example.modularapp.pages.content.search.DirectDownload
-import com.example.modularapp.videoplaying.MainViewModel
 import kotlinx.serialization.Serializable
 
 @Composable

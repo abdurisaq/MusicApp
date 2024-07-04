@@ -1,6 +1,5 @@
 package com.example.modularapp.audioplaying
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.media.MediaMetadataRetriever
@@ -21,7 +20,7 @@ interface AudioDataReader {
 class AudioDataReaderImpl(
     private val app: Application
 ): AudioDataReader {
-    private val TAG = "metaData"
+    private val tag = "metaData"
     override fun getMetaDataFromUri(contentUri: Uri): MetaData? {
         if(contentUri.scheme != "content"){
             return null
@@ -41,7 +40,7 @@ class AudioDataReaderImpl(
         }
 
         return fileName?.let{filePath ->
-            Log.d(TAG,fileName)
+            Log.d(tag,fileName)
 
             MetaData(
 

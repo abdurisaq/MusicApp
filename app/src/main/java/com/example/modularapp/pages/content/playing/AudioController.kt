@@ -1,9 +1,8 @@
 package com.example.modularapp.pages.content.playing
 
-import android.util.Log
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
@@ -25,22 +23,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
-import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
-import androidx.media3.common.Timeline
-import com.example.modularapp.audioplaying.MainViewModel2
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 import kotlinx.coroutines.launch
 
-//, viewModel: MainViewModel2
+@SuppressLint("AutoboxingStateCreation")
 @Composable
 fun AudioController(player: Player){
     //play, pause, skip next, skip previous

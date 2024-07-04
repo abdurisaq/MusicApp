@@ -90,7 +90,7 @@ fun ShowResults(response: YoutubeResponse?, downloader: Downloader, permissionGr
 fun DisplayItem(item: YoutubeResponseItem, downloader: Downloader, permissionGranted:Boolean, selectedDownloadType: String){
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val TAG = "MainActivity"
+    val tag = "MainActivity"
     var downloading by remember {
         mutableStateOf(false)
     }
@@ -140,7 +140,7 @@ fun DisplayItem(item: YoutubeResponseItem, downloader: Downloader, permissionGra
                                 coroutineScope.launch {
                                     Log.d("MainActivity", "Starting download")
                                     val url = "https://www.youtube.com/watch?v=${item.id.videoId}"
-                                    Log.d(TAG, "started download for${item.snippet.title}")
+                                    Log.d(tag, "started download for${item.snippet.title}")
                                     withContext(Dispatchers.IO) {
                                         downloading = true
                                         downloader.downloadFile2(
@@ -150,7 +150,7 @@ fun DisplayItem(item: YoutubeResponseItem, downloader: Downloader, permissionGra
                                         )
                                         downloading = false
                                     }
-                                    Log.d(TAG, "finished download for${item.snippet.title}")
+                                    Log.d(tag, "finished download for${item.snippet.title}")
                                     Toast
                                         .makeText(
                                             context,
