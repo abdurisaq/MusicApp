@@ -38,16 +38,16 @@ class AndroidDownloader(
                 .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
                 .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
                 .setTitle(sanitizedTitle)
-                .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "$sanitizedTitle.mpeg")
+                .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, sanitizedTitle)//"$sanitizedTitle.mpeg"
 
             return downloadManager.enqueue(request)
         }
          val request = DownloadManager.Request(url.toUri())
-             .setMimeType("video/mpeg")
+             .setMimeType("video/mp4")
              .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
              .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
              .setTitle(sanitizedTitle)
-             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "$sanitizedTitle.mpeg")
+             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "$sanitizedTitle.mp4")
          return downloadManager.enqueue(request)
 
     }

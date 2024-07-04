@@ -20,7 +20,7 @@ fun downloadFile(context: Context, url: String): String {
         }
         YoutubeDL.getInstance().updateYoutubeDL(context)
         val request = YoutubeDLRequest(url)
-        request.addOption("-f", "b")
+        request.addOption("-f", "best")
         val streamInfo = YoutubeDL.getInstance().getInfo(request)
         println(streamInfo.url)
 
