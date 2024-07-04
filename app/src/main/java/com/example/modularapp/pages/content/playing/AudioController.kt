@@ -23,29 +23,61 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
+import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
 import androidx.media3.common.Timeline
 import com.example.modularapp.audioplaying.MainViewModel2
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
+import kotlinx.coroutines.launch
 
 //, viewModel: MainViewModel2
 @Composable
 fun AudioController(player: Player){
     //play, pause, skip next, skip previous
     var playing by remember {
-        mutableStateOf(false)
+        mutableStateOf(player.isPlaying)
         }
-    var totalDuration:Long by remember { mutableStateOf(0) }
+    var totalDuration:Long by remember { mutableStateOf(if(player.isPlaying) {player.duration}else{0}) }
     var currentPosition: Long by remember {
-        mutableStateOf(0)
+        mutableStateOf(if(player.isPlaying) {player.currentPosition}else{0})
     }
+    val coroutineScope = rememberCoroutineScope()
+    var updateJob: Job? by remember { mutableStateOf(null) }
     DisposableEffect(Unit) {
         val listener = object : Player.Listener {
+            override fun onIsPlayingChanged(isPlaying: Boolean) {
+                playing = isPlaying
+                if (isPlaying) {
+                    updateJob = coroutineScope.launch {
+                        while (player.isPlaying) {
+                            currentPosition = player.currentPosition
+                            delay(500)
+                        }
+                    }
+                } else {
+                    updateJob?.cancel()
+                }
+            }
+
+            override fun onPlaybackStateChanged(state: Int) {
+                if (state == Player.STATE_READY) {
+                    val duration = player.duration
+                    if (duration > 0) {
+                        currentPosition = 0
+                        totalDuration = duration
+                    }
+                }
+            }
 
         }
 
@@ -56,11 +88,15 @@ fun AudioController(player: Player){
         }
     }
 
-
-    if(currentPosition != player.currentPosition){
-        currentPosition = player.currentPosition
+    LaunchedEffect(player.isPlaying) {
+        if (player.isPlaying) {
+            while (player.isPlaying) {
+                currentPosition = player.currentPosition
+                delay(500) // Update position every 500ms
+            }
+        }
     }
-    Log.d("MusicPlaying",currentPosition.toString())
+
     Column {
         Row(
             modifier = Modifier
@@ -71,11 +107,7 @@ fun AudioController(player: Player){
 
             if(playing){
 
-                totalDuration = player.contentDuration
-                if(currentPosition != player.currentPosition){
-                    currentPosition = player.currentPosition
-                }
-                Log.d("MusicPlaying",currentPosition.toString())
+
                 IconButton(onClick = {
                     playing = false
                     player.pause()
@@ -84,9 +116,6 @@ fun AudioController(player: Player){
                 }
 
             }else{
-                if(currentPosition != player.currentPosition){
-                    currentPosition = player.currentPosition
-                }
                 IconButton(onClick = {
                     playing = true
                     player.play()
