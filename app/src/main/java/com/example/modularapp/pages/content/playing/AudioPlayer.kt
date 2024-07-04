@@ -38,7 +38,7 @@ fun AudioPlayer(viewModel: MainViewModel2) {
     ) {
         Spacer(modifier = Modifier.height(10.dp))
         IconButton(onClick = {
-            selectAudioLauncher.launch("audio/mpeg") // Change to audio MIME type
+            selectAudioLauncher.launch("audio/*") // Change to audio MIME type
         }) {
             Icon(imageVector = Icons.Default.FileOpen, contentDescription = "Select Audio")
         }

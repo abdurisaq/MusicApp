@@ -1,5 +1,7 @@
 package com.example.modularapp.pages.content
 
+import android.content.Intent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,11 +10,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.modularapp.audioplaying.MainViewModel2
+import com.example.modularapp.audioplaying.services.AudioService
 import com.example.modularapp.pages.content.search.DropDown
 import com.example.modularapp.pages.content.search.SearchYoutube
 import com.example.modularapp.download.AndroidDownloader
@@ -34,7 +39,7 @@ fun ContentPages(
     //viewModel: MainViewModel,
     viewModel2: MainViewModel2
 ){
-
+    val context = LocalContext.current
 
     Box(modifier = Modifier
         .padding(innerPadding)
@@ -44,8 +49,33 @@ fun ContentPages(
                 Text(text = "SongScreen")
             }
             composable<PlaylistScreen>{
-                Text(text = "PlaylistScreen")
+//                Text(text = "PlaylistScreen")
                 //VideoPlayer(viewModel)
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Button(onClick = {
+                        Intent(context,AudioService::class.java).also {
+                            it.action =AudioService.Actions.START.toString()
+                            //startService(it)
+                            context.startService(it)
+                        }
+                    }) {
+                        Text(text = "start service")
+                    }
+
+                    Button(onClick = {
+                        Intent(context,AudioService::class.java).also {
+                            it.action = AudioService.Actions.STOP.toString()
+                            //startService(it)
+                            context.startService(it)
+                        }
+                    }) {
+                        Text(text = "stop service")
+                    }
+                }
             }
             composable<SearchScreen>{
                 Column {

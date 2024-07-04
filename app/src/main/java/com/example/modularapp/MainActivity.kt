@@ -1,5 +1,7 @@
 package com.example.modularapp
 
+import android.Manifest
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -15,8 +17,16 @@ import com.example.modularapp.ui.theme.ModularAppTheme
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.ActivityCompat
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.compose.rememberNavController
 import com.example.modularapp.audioplaying.AudioPlayerApp
@@ -29,11 +39,20 @@ import com.example.modularapp.videoplaying.MainViewModel
 import com.example.modularapp.videoplaying.VideoPlayerApp
 import com.example.modularapp.videoplaying.ViewModelFactory
 import com.example.modularapp.audioplaying.ViewModelFactory2
+import com.example.modularapp.audioplaying.services.AudioService
+
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val downloader = AndroidDownloader(this)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                0
+            )
+        }
 
         setContent {
 
@@ -76,7 +95,29 @@ class MainActivity : ComponentActivity() {
 
             ModularAppTheme {
 
-
+//                Column(
+//                    modifier = Modifier.fillMaxSize(),
+//                    horizontalAlignment = Alignment.CenterHorizontally,
+//                    verticalArrangement = Arrangement.Center
+//                ) {
+//                    Button(onClick = {
+//                        Intent(applicationContext,AudioService::class.java).also {
+//                            it.action =AudioService.Actions.START.toString()
+//                            startService(it)
+//                        }
+//                    }) {
+//                        Text(text = "start service")
+//                    }
+//
+//                    Button(onClick = {
+//                        Intent(applicationContext,AudioService::class.java).also {
+//                            it.action = AudioService.Actions.STOP.toString()
+//                            startService(it)
+//                        }
+//                    }) {
+//                        Text(text = "stop service")
+//                    }
+//                }
                 Scaffold(
 
                     bottomBar = {
