@@ -88,11 +88,12 @@ fun AudioController(player: Player){
         }
     }
 
-    Column {
+    Column (
+
+    ){
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
 
         ) {
 
@@ -115,17 +116,16 @@ fun AudioController(player: Player){
                     Icon(imageVector = Icons.Default.PlayArrow, contentDescription = "Resume")
                 }
             }
+            Slider(value = currentPosition.toFloat(),
+                onValueChange = { newValue ->
+                    currentPosition = newValue.roundToLong()
+                    player.seekTo(currentPosition) // Seek to the new position in milliseconds
+                },
+                valueRange = 0f..totalDuration.toFloat(),
+                steps = 100,
+                modifier = Modifier.fillMaxWidth())
         }
-        Spacer(modifier = Modifier.height(16.dp))  
-        Slider(value = currentPosition.toFloat(),
-            onValueChange = { newValue ->
-                currentPosition = newValue.roundToLong()
-                player.seekTo(currentPosition) // Seek to the new position in milliseconds
-            },
-            valueRange = 0f..totalDuration.toFloat(),
-            steps = 100,
-            modifier = Modifier.fillMaxWidth())
-        Spacer(modifier = Modifier.height(16.dp))
+
 
         // Current position and total duration labels
         Row(

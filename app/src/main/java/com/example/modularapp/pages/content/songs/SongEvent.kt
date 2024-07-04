@@ -1,6 +1,7 @@
 package com.example.modularapp.pages.content.songs
 
 
+import com.example.modularapp.audioplaying.data.AudioItem
 import com.example.modularapp.audioplaying.data.AudioItemSimplified
 import com.example.modularapp.audioplaying.data.SortType
 
@@ -15,6 +16,6 @@ sealed interface SongEvent {
     data class setDuration(val duration:Int):SongEvent
 
     data class sortSongs(val sortType: SortType):SongEvent
-    data class deleteSong(val song: AudioItemSimplified):SongEvent
+    data class deleteSong(val song: AudioItem):SongEvent
 
 }

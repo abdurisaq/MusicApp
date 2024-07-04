@@ -26,6 +26,7 @@ import com.example.modularapp.pages.content.playing.AudioPlayer
 import com.example.modularapp.pages.content.search.DirectDownload
 import com.example.modularapp.pages.content.songs.SongEvent
 import com.example.modularapp.pages.content.songs.SongScreen
+import com.example.modularapp.pages.content.songs.SongViewModel2
 import kotlinx.serialization.Serializable
 
 @Composable
@@ -40,7 +41,7 @@ fun ContentPages(
     //viewModel: MainViewModel,
     viewModel2: MainViewModel2,
     state: SongState,
-    onEvent: (SongEvent) ->Unit
+    songViewModel2: SongViewModel2
 ){
     val context = LocalContext.current
 
@@ -50,7 +51,7 @@ fun ContentPages(
         NavHost(navController = navController, startDestination = SongScreen) {
             composable<SongScreen>{
                 //Text(text = "SongScreen")
-                SongScreen(state,onEvent,innerPadding)
+                SongScreen(state,songViewModel2::onEvent,innerPadding,songViewModel2)
             }
             composable<PlaylistScreen>{
 //                Text(text = "PlaylistScreen")

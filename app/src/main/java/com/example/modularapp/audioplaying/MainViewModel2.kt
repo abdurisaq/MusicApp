@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.stateIn
 class MainViewModel2 (
     private val savedStateHandle: SavedStateHandle,
     val player:Player,
-    private val metaDataReader: AudioDataReader
+    private val metaDataReader: AudioDataReader,
 
 
 ):ViewModel() {
@@ -36,6 +36,7 @@ class MainViewModel2 (
     }
     fun addAudioUri(uri: Uri){
         savedStateHandle["audioUris"] = audioUris.value + uri
+        //
         player.addMediaItem(MediaItem.fromUri(uri))
     }
     fun playAudio(uri:Uri){

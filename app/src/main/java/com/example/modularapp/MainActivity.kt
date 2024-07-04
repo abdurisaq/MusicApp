@@ -28,7 +28,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
 import com.example.modularapp.audioplaying.AudioPlayerApp
 import com.example.modularapp.audioplaying.MainViewModel2
-import com.example.modularapp.audioplaying.SongViewModelFactory
+//import com.example.modularapp.audioplaying.SongViewModelFactory
+import com.example.modularapp.audioplaying.SongViewModelFactory2
 import com.example.modularapp.download.AndroidDownloader
 import com.example.modularapp.pages.content.ContentPages
 import com.example.modularapp.pages.navBar.BottomNavigationBar
@@ -41,7 +42,9 @@ import com.example.modularapp.audioplaying.data.SongDatabases
 import com.example.modularapp.pages.content.PlaylistScreen
 import com.example.modularapp.pages.content.SongScreen
 import com.example.modularapp.pages.content.songs.FloatingButton
-import com.example.modularapp.pages.content.songs.SongViewModel
+import com.example.modularapp.pages.content.songs.SongViewModel2
+
+//import com.example.modularapp.pages.content.songs.SongViewModel
 
 class MainActivity : ComponentActivity() {
     private val db by lazy {
@@ -92,8 +95,14 @@ class MainActivity : ComponentActivity() {
                     metaDataReader =AudioPlayerApp.appModule.metaDataReader
                 )
             }
-            val songViewModel: SongViewModel by viewModels {
-                SongViewModelFactory(db.dao)
+
+
+            val songViewModel: SongViewModel2 by viewModels {
+                SongViewModelFactory2(
+                    db.dao,
+                    this,
+                    player = AudioPlayerApp.appModule.audioPlayer ,
+                    metaDataReader =AudioPlayerApp.appModule.metaDataReader)
             }
             val state by songViewModel.state.collectAsState()
             val currentBackStackEntry by navController.currentBackStackEntryAsState()
@@ -115,7 +124,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
 
                     bottomBar = {
-                        BottomNavigationBar(items,selectedNavItemIndex,onItemSelected = { item -> selectedNavItemIndex = item},navController)
+                        BottomNavigationBar(items,selectedNavItemIndex,onItemSelected = { item -> selectedNavItemIndex = item},navController,songViewModel)
                     },
                     floatingActionButton = {
                         if (currentDestination == SongScreen::class.java.name) {
@@ -124,7 +133,7 @@ class MainActivity : ComponentActivity() {
                     },
                     modifier = Modifier.padding(16.dp),
                     content = { innerPadding ->
-                        ContentPages(innerPadding,navController,permissionGranted,downloader,selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type},viewModel2,state , songViewModel::onEvent)
+                        ContentPages(innerPadding,navController,permissionGranted,downloader,selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type},viewModel2,state , songViewModel)
                     }
                 )
             }

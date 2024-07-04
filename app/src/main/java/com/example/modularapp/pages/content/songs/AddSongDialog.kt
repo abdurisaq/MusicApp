@@ -1,5 +1,7 @@
 package com.example.modularapp.pages.content.songs
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -64,3 +66,21 @@ fun AddSongDialog(
         }
     )
 }
+//
+//val selectAudioLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(),
+//    onResult = { uri ->
+//        uri?.let(viewModel::addAudioUri)
+//    })
+
+
+//@Composable
+//fun AddSongDialog2(
+//    state: SongState,
+//    onEvent: (SongEvent) -> Unit,
+//    modifier: Modifier = Modifier
+//) {
+//    val selectAudioLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(),
+//    onResult = { uri ->
+//        uri?.let(viewModel::addAudioUri)
+//    })
+//}

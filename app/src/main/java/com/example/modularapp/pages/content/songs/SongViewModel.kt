@@ -81,7 +81,7 @@ class SongViewModel(
                     duration = duration,
                 )
                 viewModelScope.launch {
-                    dao.upsertSong(song)
+                    //dao.upsertSong(song)
                 }
                 _state.update { it.copy(
                     isAddingSong = false,

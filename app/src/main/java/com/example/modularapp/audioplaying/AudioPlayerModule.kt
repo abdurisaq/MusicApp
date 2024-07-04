@@ -14,10 +14,10 @@ import androidx.media3.exoplayer.ExoPlayer
 class AudioPlayerModuleImpl(app:Application) :AudioPlayerModule{
     override val audioPlayer: Player by lazy {
         ExoPlayer.Builder(app).build()
-//            .also { exoPlayer ->
-//
-//            exoPlayer.playWhenReady = true
-//        }
+            .also { exoPlayer ->
+
+            exoPlayer.playWhenReady = true
+        }
     }
 
     override val metaDataReader: AudioDataReader by lazy {
