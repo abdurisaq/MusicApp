@@ -1,14 +1,13 @@
 package com.example.modularapp.videoplaying
 
 import android.app.Application
-import androidx.lifecycle.SavedStateHandle
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 
 
  interface VideoPlayerModule{
     val videoPlayer :Player
-    val metaDataReader: MetaDataReader
+    val metaDataReader: VideoMetaDataReader
 
 
  }
@@ -17,8 +16,8 @@ class VideoPlayerModuleImpl(app:Application) :VideoPlayerModule{
         ExoPlayer.Builder(app).build()
     }
 
-    override val metaDataReader: MetaDataReader by lazy {
-        MetaDataReaderImpl(app)
+    override val metaDataReader: VideoMetaDataReader by lazy {
+        VideoMetaDataReaderImpl(app)
     }
 
 }

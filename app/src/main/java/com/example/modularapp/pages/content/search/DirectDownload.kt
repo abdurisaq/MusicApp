@@ -24,7 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 @Composable
-fun DirectDownload(downloader: Downloader, permissionGranted:Boolean){
+fun DirectDownload(downloader: Downloader, permissionGranted:Boolean,selectedDownloadType: String){
 
 
     var videoUrl by remember { mutableStateOf("") } // Replace with actual video URL
@@ -46,7 +46,7 @@ fun DirectDownload(downloader: Downloader, permissionGranted:Boolean){
                     coroutineScope.launch {
                         Log.d("MainActivity", "Starting download")
                         withContext(Dispatchers.IO) {
-                            downloader.downloadFile(downloadFile(context,videoUrl))
+                            downloader.downloadFile2(downloadFile(context,videoUrl),"placeholder",selectedDownloadType)
                         }
                         Toast.makeText(
                             context,

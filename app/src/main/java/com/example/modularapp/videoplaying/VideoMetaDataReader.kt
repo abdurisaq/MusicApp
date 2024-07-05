@@ -8,13 +8,13 @@ data class MetaData(
     val fileName:String
 )
 
-interface MetaDataReader {
+interface VideoMetaDataReader {
     fun getMetaDataFromUri (contentUri : Uri): MetaData?
 }
 
-class MetaDataReaderImpl(
+class VideoMetaDataReaderImpl(
     private val app: Application
-): MetaDataReader {
+): VideoMetaDataReader {
     override fun getMetaDataFromUri(contentUri: Uri): MetaData? {
         if(contentUri.scheme != "content"){
             return null

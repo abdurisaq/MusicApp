@@ -31,11 +31,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.media3.ui.PlayerView
-import com.example.modularapp.videoplaying.MainViewModel
+import com.example.modularapp.videoplaying.VideoMainViewModel
 
 @Composable
 
-fun VideoPlayer(viewModel: MainViewModel){
+fun VideoPlayer(viewModel: VideoMainViewModel){
     val videoItems by viewModel.videoItems.collectAsState()
     val selectVideoLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(),
         onResult = {uri ->

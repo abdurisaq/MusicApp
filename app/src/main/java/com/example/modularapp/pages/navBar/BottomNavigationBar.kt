@@ -11,7 +11,7 @@ import com.example.modularapp.pages.content.SearchScreen
 import com.example.modularapp.pages.content.SettingScreen
 import com.example.modularapp.pages.content.SongScreen
 import com.example.modularapp.pages.content.playing.AudioController
-import com.example.modularapp.pages.content.songs.SongViewModel2
+import com.example.modularapp.pages.content.songs.SongViewModel
 
 @Composable
 fun BottomNavigationBar(
@@ -19,7 +19,7 @@ fun BottomNavigationBar(
     selectedItemIndex: Int,
     onItemSelected: (Int) -> Unit,
     navController: NavController,
-    viewModel: SongViewModel2
+    viewModel: SongViewModel
 ) {
     Column {
         AudioController(player = viewModel.player)

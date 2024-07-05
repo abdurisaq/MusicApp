@@ -26,25 +26,18 @@ import androidx.core.app.ActivityCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
+import com.example.modularapp.audioplaying.AudioMainViewModel
 import com.example.modularapp.audioplaying.AudioPlayerApp
-import com.example.modularapp.audioplaying.MainViewModel2
-//import com.example.modularapp.audioplaying.SongViewModelFactory
-import com.example.modularapp.audioplaying.SongViewModelFactory2
+import com.example.modularapp.audioplaying.AudioViewModelFactory
+import com.example.modularapp.audioplaying.SongViewModelFactory
 import com.example.modularapp.download.AndroidDownloader
 import com.example.modularapp.pages.content.ContentPages
 import com.example.modularapp.pages.navBar.BottomNavigationBar
 import com.example.modularapp.pages.navBar.items
-//import com.example.modularapp.videoplaying.MainViewModel
-//import com.example.modularapp.videoplaying.VideoPlayerApp
-//import com.example.modularapp.videoplaying.ViewModelFactory
-import com.example.modularapp.audioplaying.ViewModelFactory2
 import com.example.modularapp.audioplaying.data.SongDatabases
-import com.example.modularapp.pages.content.PlaylistScreen
 import com.example.modularapp.pages.content.SongScreen
 import com.example.modularapp.pages.content.songs.FloatingButton
-import com.example.modularapp.pages.content.songs.SongViewModel2
-
-//import com.example.modularapp.pages.content.songs.SongViewModel
+import com.example.modularapp.pages.content.songs.SongViewModel
 
 class MainActivity : ComponentActivity() {
     private val db by lazy {
@@ -88,8 +81,8 @@ class MainActivity : ComponentActivity() {
 //                    metaDataReader =VideoPlayerApp.appModule.metaDataReader
 //                )
 //            }
-            val viewModel2: MainViewModel2 by viewModels {
-                ViewModelFactory2(
+            val audioViewModel: AudioMainViewModel by viewModels {
+                AudioViewModelFactory(
                     this,
                     player = AudioPlayerApp.appModule.audioPlayer ,
                     metaDataReader =AudioPlayerApp.appModule.metaDataReader
@@ -97,8 +90,8 @@ class MainActivity : ComponentActivity() {
             }
 
 
-            val songViewModel: SongViewModel2 by viewModels {
-                SongViewModelFactory2(
+            val songViewModel: SongViewModel by viewModels {
+                SongViewModelFactory(
                     db.dao,
                     this,
                     player = AudioPlayerApp.appModule.audioPlayer ,
@@ -133,7 +126,7 @@ class MainActivity : ComponentActivity() {
                     },
                     modifier = Modifier.padding(16.dp),
                     content = { innerPadding ->
-                        ContentPages(innerPadding,navController,permissionGranted,downloader,selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type},viewModel2,state , songViewModel)
+                        ContentPages(innerPadding,navController,permissionGranted,downloader,selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type},audioViewModel,state , songViewModel)
                     }
                 )
             }

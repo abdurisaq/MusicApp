@@ -22,9 +22,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.modularapp.audioplaying.MainViewModel2
+import com.example.modularapp.audioplaying.AudioMainViewModel
 @Composable
-fun AudioPlayer(viewModel: MainViewModel2) {
+fun AudioPlayer(viewModel: AudioMainViewModel) {
     val audioItems by viewModel.audioItems.collectAsState()
     val selectAudioLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->

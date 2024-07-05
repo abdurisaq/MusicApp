@@ -16,7 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.modularapp.audioplaying.MainViewModel2
+import com.example.modularapp.audioplaying.AudioMainViewModel
 import com.example.modularapp.audioplaying.data.SongState
 import com.example.modularapp.audioplaying.services.AudioService
 import com.example.modularapp.pages.content.search.DropDown
@@ -24,9 +24,8 @@ import com.example.modularapp.pages.content.search.SearchYoutube
 import com.example.modularapp.download.AndroidDownloader
 import com.example.modularapp.pages.content.playing.AudioPlayer
 import com.example.modularapp.pages.content.search.DirectDownload
-import com.example.modularapp.pages.content.songs.SongEvent
 import com.example.modularapp.pages.content.songs.SongScreen
-import com.example.modularapp.pages.content.songs.SongViewModel2
+import com.example.modularapp.pages.content.songs.SongViewModel
 import kotlinx.serialization.Serializable
 
 @Composable
@@ -38,10 +37,9 @@ fun ContentPages(
     downloader: AndroidDownloader,
     selectedDownloadType: String,
     onTypeSelected: (String) -> Unit,
-    //viewModel: MainViewModel,
-    viewModel2: MainViewModel2,
+    viewModel2: AudioMainViewModel,
     state: SongState,
-    songViewModel2: SongViewModel2
+    songViewModel2: SongViewModel
 ){
     val context = LocalContext.current
 
@@ -93,7 +91,8 @@ fun ContentPages(
             }
             composable<DirectDownloadScreen> {
                 Column {
-                    DirectDownload(downloader,permissionGranted)
+                    DropDown(selectedDownloadType, onDownloadTypeChange = { onTypeSelected(it) })
+                    DirectDownload(downloader,permissionGranted,selectedDownloadType)
 
                 }
 

@@ -4,10 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
@@ -24,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.media3.common.Player
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -40,7 +36,7 @@ fun AudioController(player: Player){
         }
     var totalDuration:Long by remember { mutableStateOf(if(player.isPlaying) {player.duration}else{0}) }
     var currentPosition: Long by remember {
-        mutableStateOf(if(player.isPlaying) {player.currentPosition}else{0})
+        mutableStateOf(if(player.isPlaying||player.currentPosition!=0L) {player.currentPosition}else{0})
     }
     val coroutineScope = rememberCoroutineScope()
     var updateJob: Job? by remember { mutableStateOf(null) }

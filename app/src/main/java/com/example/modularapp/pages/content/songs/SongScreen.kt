@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.media3.common.util.Log
 import com.example.modularapp.audioplaying.data.SongState
 import com.example.modularapp.audioplaying.data.SortType
-import com.example.modularapp.pages.content.playing.AudioController
+import com.example.modularapp.pages.content.playing.millisecondsToMinuteAndSeconds
 
 @Composable
 fun SongScreen2(
@@ -129,7 +129,7 @@ fun SongScreen(
     state: SongState,
     onEvent: (SongEvent) ->Unit,
     padding:PaddingValues,
-    viewModel: SongViewModel2
+    viewModel: SongViewModel
 ){
         val audioItems by viewModel.audioItems.collectAsState()
         val context = LocalContext.current
@@ -221,7 +221,7 @@ fun SongScreen(
                             })
                         Text(text = song.artist, fontSize = 12.sp)
                     }
-                    Text(text = song.duration.toString(), fontSize = 15.sp)
+                    Text(text = millisecondsToMinuteAndSeconds(song.duration), fontSize = 15.sp)
                     IconButton(onClick = {
                         onEvent(SongEvent.deleteSong(song))
                     }) {
