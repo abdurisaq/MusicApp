@@ -94,7 +94,7 @@ fun SongScreen2(
                         Text(text = song.name, fontSize = 20.sp)
                         Text(text = song.artist, fontSize = 12.sp)
                     }
-                    Text(text = song.duration.toString(), fontSize = 15.sp)
+                    Text(text = millisecondsToMinuteAndSeconds(song.duration), fontSize = 15.sp)
                     IconButton(onClick = {
                         onEvent(SongEvent.deleteSong(song))
                     }) {
