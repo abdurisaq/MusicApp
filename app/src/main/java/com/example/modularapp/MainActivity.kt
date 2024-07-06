@@ -16,12 +16,9 @@ import com.example.modularapp.ui.theme.ModularAppTheme
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -124,8 +121,9 @@ class MainActivity : ComponentActivity() {
                             FloatingButton(songViewModel::onEvent)
                         }
                     },
-                    modifier = Modifier.padding(16.dp),
+                    //modifier = Modifier.padding(16.dp),
                     content = { innerPadding ->
+
                         ContentPages(innerPadding,navController,permissionGranted,downloader,selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type},audioViewModel,state , songViewModel)
                     }
                 )
