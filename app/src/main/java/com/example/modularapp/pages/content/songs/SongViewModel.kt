@@ -116,6 +116,12 @@ class SongViewModel(
     fun onEvent(event: SongEvent){
         when(event){
             is SongEvent.deleteSong -> {
+                try {
+                    val updatedUris = audioUris.value.filter { it != event.song.content }
+                    savedStateHandle.set("audioUris", updatedUris)
+                } catch (e: Exception) {
+                    Log.e("ViewModel", "Error updating audioUris: ${e.message}")
+                }
                 viewModelScope.launch {
 
                     dao.deleteSong(event.song)

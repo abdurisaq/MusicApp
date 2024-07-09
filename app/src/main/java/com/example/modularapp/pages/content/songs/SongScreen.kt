@@ -50,7 +50,7 @@ fun SongScreen2(
     Scaffold(
         floatingActionButton = { FloatingButton(onEvent) }
     ) {
-        padding ->
+            padding ->
         if(state.isAddingSong){
             AddSongDialog(state = state, onEvent =onEvent )
         }
@@ -131,18 +131,18 @@ fun SongScreen(
     padding:PaddingValues,
     viewModel: SongViewModel
 ){
-        val audioItems by viewModel.audioItems.collectAsState()
-        val context = LocalContext.current
-        val selectAudioLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(),
-            onResult = { uri ->
-                uri?.let {
-                    viewModel.addAudioUri(uri)
-                    // Take persistable URI permission
-                    val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                    context.contentResolver.takePersistableUriPermission(uri, takeFlags)
-                }
+    val audioItems by viewModel.audioItems.collectAsState()
+    val context = LocalContext.current
+    val selectAudioLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(),
+        onResult = { uri ->
+            uri?.let {
+                viewModel.addAudioUri(uri)
+                // Take persistable URI permission
+                val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                context.contentResolver.takePersistableUriPermission(uri, takeFlags)
             }
-        )
+        }
+    )
     val preselectedAudio = rememberLauncherForActivityResult(contract = ActivityResultContracts.OpenDocument(),
         onResult = { uri ->
             uri?.let {
@@ -153,13 +153,13 @@ fun SongScreen(
             }
         }
     )
-        var uriToAdd by remember { mutableStateOf<Uri?>(null) }
+    var uriToAdd by remember { mutableStateOf<Uri?>(null) }
 
-        if(state.isAddingSong){
-            //AddSongDialog(state = state, onEvent =onEvent )
-            preselectedAudio.launch(arrayOf("audio/*"))
+    if(state.isAddingSong){
+        //AddSongDialog(state = state, onEvent =onEvent )
+        preselectedAudio.launch(arrayOf("audio/*"))
 
-        }
+    }
     Column (
         verticalArrangement = Arrangement.SpaceEvenly
     ){
