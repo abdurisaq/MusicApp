@@ -8,10 +8,10 @@ import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
 
 @Database(
-    entities = [AudioItem::class],
-    version = 2,//hardcoded, might need to change later
+    entities = [AudioItem::class, Playlist::class, PlaysIn::class],
+    version = 3,//hardcoded, might need to change later
     autoMigrations = [
-        AutoMigration(from =1, to = 2, spec = MyAutoMigration::class)
+        AutoMigration(from =2, to = 3)
     ]
 )
 @TypeConverters(ItemConverter::class)

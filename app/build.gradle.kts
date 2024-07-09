@@ -97,6 +97,9 @@ dependencies {
     androidTestImplementation("androidx.room:room-testing:2.6.1")
     androidTestImplementation("com.google.truth:truth:1.1.3")
 
+    implementation("com.mpatric:mp3agic:0.9.1")
+
+
     implementation (libs.androidx.room.ktx)
     kapt (libs.androidx.room.compiler)//figure out how to change this to use ksp later, was getting build errors so reverted
 

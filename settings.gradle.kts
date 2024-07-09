@@ -17,6 +17,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = uri("https://maven.pkg.github.com/abdurisaq/mp3agic")
+        }
         maven { url  = uri("https://jitpack.io") }
     }
 }

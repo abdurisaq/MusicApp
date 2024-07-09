@@ -5,6 +5,8 @@ import android.net.Uri
 import androidx.media3.common.MediaItem
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 
@@ -36,6 +38,34 @@ data class AudioItemSimplified(
     @PrimaryKey(autoGenerate = true)
     val id:Int? = null
 
+)
+
+@Entity
+data class Playlist(
+    val name: String,
+    val length:Int,
+    @PrimaryKey(autoGenerate = true)
+    val playlistId:Int? = null
+)
+
+@Entity(
+    primaryKeys = ["songId", "playlistId"],
+    foreignKeys = [
+        ForeignKey(entity = AudioItem::class,
+            parentColumns = ["id"],
+            childColumns = ["songId"],
+            onDelete = ForeignKey.CASCADE),
+        ForeignKey(entity = Playlist::class,
+            parentColumns = ["playlistId"],
+            childColumns = ["playlistId"],
+            onDelete = ForeignKey.CASCADE)
+    ],
+    indices = [Index(value = ["playlistId"]), Index(value = ["songId"])]
+)
+data class PlaysIn(
+    val songId: Int,
+    val playlistId: Int,
+    val playlistPosition: Int
 )
 
 class ItemConverter{
