@@ -1,6 +1,8 @@
 package com.example.modularapp.pages.content
 
 import android.content.Intent
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.modularapp.audioplaying.AudioMainViewModel
 import com.example.modularapp.audioplaying.data.SongState
 import com.example.modularapp.audioplaying.services.AudioService
@@ -32,7 +35,7 @@ import kotlinx.serialization.Serializable
 
 fun ContentPages(
     innerPadding: PaddingValues,
-    navController: NavHostController,
+    navController: NavHostController = rememberNavController(),
     permissionGranted:Boolean,
     downloader: AndroidDownloader,
     selectedDownloadType: String,
@@ -46,9 +49,10 @@ fun ContentPages(
     Box(modifier = Modifier
         .padding(innerPadding)
         .fillMaxSize()){
-        NavHost(navController = navController, startDestination = SongScreen) {
+        NavHost(navController = navController, startDestination = SongScreen,
+            enterTransition = { EnterTransition.None }, exitTransition = { ExitTransition.None }) {
             composable<SongScreen>{
-                //Text(text = "SongScreen")
+//                Text(text = "SongScreen")
                 SongScreen(state,songViewModel2::onEvent,innerPadding,songViewModel2)
             }
             composable<PlaylistScreen>{
@@ -81,6 +85,7 @@ fun ContentPages(
                 }
             }
             composable<SearchScreen>{
+//                Text(text = "SearchScreen")
                 Column {
 
                     DropDown(selectedDownloadType, onDownloadTypeChange = { onTypeSelected(it) })
@@ -90,6 +95,7 @@ fun ContentPages(
 
             }
             composable<DirectDownloadScreen> {
+//                Text(text = "DSearchScreen")
                 Column {
                     DropDown(selectedDownloadType, onDownloadTypeChange = { onTypeSelected(it) })
                     DirectDownload(downloader,permissionGranted,selectedDownloadType)
@@ -98,8 +104,8 @@ fun ContentPages(
 
             }
             composable<SettingScreen>{
-                //Text(text = "SettingScreen")
-                AudioPlayer(viewModel = viewModel2)
+                Text(text = "SettingScreen")
+                //AudioPlayer(viewModel = viewModel2)
             }
 
         }

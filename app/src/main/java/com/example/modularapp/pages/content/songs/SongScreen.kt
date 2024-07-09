@@ -196,11 +196,7 @@ fun SongScreen(
             }
 
             items(state.songs) { song ->
-//                Log.d("playerAudio", song.name)
-//                Log.d("playerAudio", song.artist)
-//                Log.d("playerAudio", song.duration.toString())
-//                Log.d("playerAudio", song.content.toString())
-//                Log.d("playerAudio", song.mediaItem.toString())
+
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {

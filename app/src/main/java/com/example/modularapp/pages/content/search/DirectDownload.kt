@@ -19,7 +19,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.modularapp.BuildConfig
 import com.example.modularapp.download.Downloader
+import com.example.network.KtorClient
+import com.example.network.json.YoutubeNoembedResponse
+import com.example.network.json.YoutubeResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -31,6 +35,8 @@ fun DirectDownload(downloader: Downloader, permissionGranted:Boolean,selectedDow
 
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+    var search by remember { mutableStateOf<YoutubeNoembedResponse?>(null) }
+    val ktorClient = KtorClient()
     Row(modifier = Modifier.padding(16.dp)) {
         TextField(
             value = videoUrl,
@@ -46,7 +52,10 @@ fun DirectDownload(downloader: Downloader, permissionGranted:Boolean,selectedDow
                     coroutineScope.launch {
                         Log.d("MainActivity", "Starting download")
                         withContext(Dispatchers.IO) {
-                            downloader.downloadFile2(downloadFile(context,videoUrl),"placeholder",selectedDownloadType)
+                            search = ktorClient.getYoutubeVideoName(videoUrl)
+                            downloader.downloadFile2(downloadFile(context,videoUrl),
+                                search?.title ?:"No name",selectedDownloadType)
+
                         }
                         Toast.makeText(
                             context,

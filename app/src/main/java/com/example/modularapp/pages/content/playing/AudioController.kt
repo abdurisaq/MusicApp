@@ -36,7 +36,8 @@ fun AudioController(player: Player){
         }
     var totalDuration:Long by remember { mutableStateOf(if(player.isPlaying) {player.duration}else{0}) }
     var currentPosition: Long by remember {
-        mutableStateOf(if(player.isPlaying||player.currentPosition!=0L) {player.currentPosition}else{0})
+        mutableStateOf(if(player.playbackState != Player.STATE_IDLE||player.playbackState != Player.STATE_ENDED||player.currentPosition!=0L) {player.currentPosition}else{0})
+
     }
     val coroutineScope = rememberCoroutineScope()
     var updateJob: Job? by remember { mutableStateOf(null) }
@@ -60,7 +61,7 @@ fun AudioController(player: Player){
                 if (state == Player.STATE_READY) {
                     val duration = player.duration
                     if (duration > 0) {
-                        currentPosition = 0
+                        //currentPosition = 0
                         totalDuration = duration
                     }
                 }

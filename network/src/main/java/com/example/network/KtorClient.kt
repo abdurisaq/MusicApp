@@ -1,6 +1,7 @@
 package com.example.network
 
 import android.util.Log
+import com.example.network.json.YoutubeNoembedResponse
 import com.example.network.json.YoutubeResponse
 import io.ktor.client.HttpClient
 
@@ -58,6 +59,31 @@ class KtorClient {
         }
 
         return searches
+    }
+    suspend fun getYoutubeVideoName(videoUrl:String):YoutubeNoembedResponse?{
+        val url = "https://noembed.com/embed?url=${videoUrl}"
+        var search : YoutubeNoembedResponse? = null
+        try {
+            val response: HttpResponse = client.get(url){
+                method = HttpMethod.Get
+            }
+            if (response.status.value == 200) {
+                val rawResponse = response.bodyAsText()
+                Log.d(tag, "Raw Response: $rawResponse")
+                Log.d(tag, "test")
+                search = Gson().fromJson(rawResponse,YoutubeNoembedResponse::class.java)
+
+                Log.d(tag, "test1")
+
+            } else {
+                Log.e(tag, "Error: Received response code ${response.status.value}")
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
+            Log.e(tag, "Error searching for youtube name through direct url: ${e.message}")
+        }
+        return search
+
     }
 //    suspend fun downloadAudio(url: String, context: Context): Uri? {
 //        try {
