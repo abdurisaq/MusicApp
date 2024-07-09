@@ -53,7 +53,7 @@ fun DirectDownload(downloader: Downloader, permissionGranted:Boolean,selectedDow
                         Log.d("MainActivity", "Starting download")
                         withContext(Dispatchers.IO) {
                             search = ktorClient.getYoutubeVideoName(videoUrl)
-                            downloader.downloadFile2(downloadFile(context,videoUrl),
+                            downloader.downloadFile3(downloadFile(context,videoUrl),
                                 search?.title ?:"No name",selectedDownloadType)
 
                         }

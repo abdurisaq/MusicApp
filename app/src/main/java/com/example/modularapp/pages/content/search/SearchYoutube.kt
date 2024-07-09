@@ -143,7 +143,8 @@ fun DisplayItem(item: YoutubeResponseItem, downloader: Downloader, permissionGra
                                     Log.d(tag, "started download for${item.snippet.title}")
                                     withContext(Dispatchers.IO) {
                                         downloading = true
-                                        downloader.downloadFile2(
+
+                                        downloader.downloadFile3(
                                             downloadFile(context, url),
                                             item.snippet.title,
                                             selectedDownloadType
