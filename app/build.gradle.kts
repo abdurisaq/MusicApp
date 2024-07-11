@@ -63,7 +63,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -115,6 +116,8 @@ dependencies {
     implementation(libs.media3.session)
 
 
+    implementation(libs.androidx.core)
+    implementation( libs.androidx.media)
 
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.coil.compose)

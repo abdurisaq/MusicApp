@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -32,22 +33,23 @@ import com.example.modularapp.pages.content.ContentPages
 import com.example.modularapp.pages.navBar.BottomNavigationBar
 import com.example.modularapp.pages.navBar.items
 import com.example.modularapp.audioplaying.data.SongDatabases
-import com.example.modularapp.pages.content.SongScreen
 import com.example.modularapp.pages.content.songs.FloatingButton
 import com.example.modularapp.pages.content.songs.SongViewModel
 
 class MainActivity : ComponentActivity() {
-    private val db by lazy {
-        Room.databaseBuilder(
-            applicationContext,
-            SongDatabases::class.java,
-            "songs.db"
-        ).build()
-    }
+//    private val db by lazy {
+//        Room.databaseBuilder(
+//            applicationContext,
+//            SongDatabases::class.java,
+//            "songs.db"
+//        ).build()
+//    }
+
 
     @SuppressLint("AutoboxingStateCreation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        SongDatabases.getDatabase(this)
         val downloader = AndroidDownloader(this)
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
             ActivityCompat.requestPermissions(
@@ -71,13 +73,6 @@ class MainActivity : ComponentActivity() {
                     Toast.makeText(context, "Permission not granted", Toast.LENGTH_SHORT).show()
                 }
             }
-//            val viewModel: MainViewModel by viewModels {
-//                ViewModelFactory(
-//                    this,
-//                    player = VideoPlayerApp.appModule.videoPlayer,
-//                    metaDataReader =VideoPlayerApp.appModule.metaDataReader
-//                )
-//            }
             val audioViewModel: AudioMainViewModel by viewModels {
                 AudioViewModelFactory(
                     this,
@@ -86,7 +81,7 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
-
+            val db = SongDatabases.getDatabase(context)
             val songViewModel: SongViewModel by viewModels {
                 SongViewModelFactory(
                     db.dao,
@@ -97,6 +92,7 @@ class MainActivity : ComponentActivity() {
             val state by songViewModel.state.collectAsState()
             val currentBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = currentBackStackEntry?.destination?.route
+            Log.d("Navigation","current destination = $currentDestination")
 
             LaunchedEffect(Unit) {
                 // Request the required permissions
@@ -114,10 +110,10 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
 
                     bottomBar = {
-                        BottomNavigationBar(items,selectedNavItemIndex,onItemSelected = { item -> selectedNavItemIndex = item},navController,songViewModel)
+                        BottomNavigationBar(items,selectedNavItemIndex,onItemSelected = { item -> selectedNavItemIndex = item},navController)
                     },
                     floatingActionButton = {
-                        if (currentDestination == SongScreen::class.java.name) {
+                        if (currentDestination == "SongScreen") {
                             FloatingButton(songViewModel::onEvent)
                         }
                     },

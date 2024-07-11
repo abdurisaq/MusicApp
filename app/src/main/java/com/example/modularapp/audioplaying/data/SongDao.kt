@@ -1,5 +1,6 @@
 package com.example.modularapp.audioplaying.data
 
+import androidx.media3.common.MediaItem
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
@@ -25,6 +26,9 @@ interface SongDao {
 
     @Query("SELECT * FROM AudioItem WHERE content= :uriString")
     fun getSongCountFromUri(uriString: String):Flow<List<AudioItem>>
+
+    @Query("SELECT name FROM AudioItem WHERE mediaItem= :mediaItem")
+    fun getSongName(mediaItem:MediaItem):List<String>
 
 //    @Transaction
 //    @Query("SELECT * FROM PlaysIn WHERE playlistId = :playlistId ORDER BY playlistPosition")

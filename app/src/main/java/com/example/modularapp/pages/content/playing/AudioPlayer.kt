@@ -61,6 +61,6 @@ fun AudioPlayer(viewModel: AudioMainViewModel) {
 
             }
         }
-            AudioController(player =viewModel.player)
+            AudioController()
     }
 }

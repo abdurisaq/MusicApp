@@ -47,44 +47,18 @@ fun ContentPages(
     val context = LocalContext.current
 
     Box(modifier = Modifier
-        .padding(innerPadding)
+        .padding(innerPadding)//enterTransition = { EnterTransition.None }, exitTransition = { ExitTransition.None }
         .fillMaxSize()){
-        NavHost(navController = navController, startDestination = SongScreen,
-            enterTransition = { EnterTransition.None }, exitTransition = { ExitTransition.None }) {
-            composable<SongScreen>{
+        NavHost(navController = navController, startDestination = "SongScreen"
+            ) {
+            composable(route = "SongScreen"){
 //                Text(text = "SongScreen")
                 SongScreen(state,songViewModel2::onEvent,innerPadding,songViewModel2)
             }
-            composable<PlaylistScreen>{
-//                Text(text = "PlaylistScreen")
-                //VideoPlayer(viewModel)
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Button(onClick = {
-                        Intent(context,AudioService::class.java).also {
-                            it.action =AudioService.Actions.START.toString()
-                            //startService(it)
-                            context.startService(it)
-                        }
-                    }) {
-                        Text(text = "start service")
-                    }
-
-                    Button(onClick = {
-                        Intent(context,AudioService::class.java).also {
-                            it.action = AudioService.Actions.STOP.toString()
-                            //startService(it)
-                            context.startService(it)
-                        }
-                    }) {
-                        Text(text = "stop service")
-                    }
-                }
+            composable(route = "PlaylistScreen"){
+                Text(text = "PlaylistScreen")
             }
-            composable<SearchScreen>{
+            composable(route = "SearchScreen"){
 //                Text(text = "SearchScreen")
                 Column {
 
@@ -92,21 +66,20 @@ fun ContentPages(
                     SearchYoutube(downloader = downloader, permissionGranted =permissionGranted,selectedDownloadType )
 
                 }
-
             }
-            composable<DirectDownloadScreen> {
+            composable(route = "DirectDownloadScreen"){
 //                Text(text = "DSearchScreen")
                 Column {
                     DropDown(selectedDownloadType, onDownloadTypeChange = { onTypeSelected(it) })
                     DirectDownload(downloader,permissionGranted,selectedDownloadType)
 
                 }
+            }
+            composable(route = "SettingScreen"){
+                Text(text = "SettingsScreen")
+            }
 
-            }
-            composable<SettingScreen>{
-                Text(text = "SettingScreen")
-                //AudioPlayer(viewModel = viewModel2)
-            }
+
 
         }
     }
@@ -114,17 +87,3 @@ fun ContentPages(
 }
 
 
-
-@Serializable
-object SongScreen
-
-@Serializable
-object PlaylistScreen
-
-@Serializable
-object SearchScreen
-
-@Serializable
-object DirectDownloadScreen
-@Serializable
-object SettingScreen

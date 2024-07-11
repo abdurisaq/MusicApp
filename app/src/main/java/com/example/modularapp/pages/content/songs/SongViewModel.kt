@@ -7,8 +7,10 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import com.example.modularapp.audioplaying.AudioDataReader
+import com.example.modularapp.audioplaying.AudioPlayerApp
 import com.example.modularapp.audioplaying.data.AudioItem
 import com.example.modularapp.audioplaying.data.SongDao
 import com.example.modularapp.audioplaying.data.SongState
@@ -46,54 +48,82 @@ class SongViewModel(
         )
     }}.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    fun addAudioUri(uri: Uri){
-        Log.d("playerAudio","dowegethere1")
+    fun addAudioUri(uri: Uri,title:String){//androidx.media3.common.MediaMetadata@3d1fc8ee
+        Log.d("test","title passed to addAudioUri $title")
+
         try {
             savedStateHandle.set("audioUris", audioUris.value + uri)
         } catch (e: Exception) {
             Log.e("ViewModel", "Error updating audioUris: ${e.message}")
         }
-        Log.d("playerAudio","dowegethere2")
+
         viewModelScope.launch {
-            Log.d("playerAudio","dowegethere3")
+
             viewModelScope.launch {
                 dao.getSongCountFromUri(uri.toString()).collect { listOfAudioItems ->
                     if (listOfAudioItems.isEmpty()) {
                         // No songs returned by the query
-                        audioItems.value.find { it.content == uri }?.let { dao.upsertSong(it) }
+                        audioItems.value.find { it.content == uri }?.let {
+                            dao.upsertSong(it)
+
+                            val metadata = MediaMetadata.Builder()
+                                .setTitle(title)
+                                .build()
+
+                            val mediaItem = MediaItem.Builder()
+                                .setUri(uri) // Replace with your media URI
+                                .setMediaMetadata(metadata)
+                                .build()
+                            Log.d("test","mediaItem string passed to addAudioUri $mediaItem")
+                            player.addMediaItem(mediaItem)
+                        }
                         Log.d("playerAudio","No songs found with the URI: ${uri.toString()}")
 
                     } else {
                         // Songs found
                         Log.d("playerAudio","Found ${listOfAudioItems.size} songs with the URI: ${uri.toString()}")
+                        val metadata = MediaMetadata.Builder()
+                            .setTitle(title)
+                            .build()
 
+                        val mediaItem = MediaItem.Builder()
+                            .setUri(uri) // Replace with your media URI
+                            .setMediaMetadata(metadata)
+                            .build()
+                        Log.d("test","mediaItem string passed to addAudioUri $mediaItem")
+                        player.addMediaItem(mediaItem)
                     }
                 }
             }
 
-            //audioItems.value.find { it.content == uri }?.let { dao.upsertSong(it) }
-            Log.d("playerAudio","dowegethere4")
+
 
         }
-        Log.d("playerAudio","dowegethere5")
         _state.value.isAddingSong = false
-        Log.d("playerAudio","dowegethere6")
-        player.addMediaItem(MediaItem.fromUri(uri))
-        Log.d("playerAudio","dowegethere7")
     }
     fun playAudio(uri:Uri){
-        if(audioItems.value.find { it.content == uri }?.mediaItem == null) {
+        val mediaItem = audioItems.value.find { it.content == uri }?.mediaItem
+        if(mediaItem == null) {
             Log.d("playerAudio","song isn't in audioItmes $uri")
 
+        }else{
+            Log.d("playerAudio","song is in audioItmes $uri")
+            Log.d("playerAudio","is player playing ${player.isPlaying}")
+
+            player.setMediaItem(mediaItem)
+            player.play()
+            Log.d("playerAudio","is player playing ${player.isPlaying}")
         }
-        player.setMediaItem(
-            audioItems.value.find { it.content == uri }?.mediaItem ?: return
-        )
+//        player.setMediaItem(
+//            audioItems.value.find { it.content == uri }?.mediaItem ?: return
+//        )
+//        player.play()
     }
 
 
     override fun onCleared() {
         player.release()
+        AudioPlayerApp.appModule.audioPlayer.release()
     }
 
     private val _state = MutableStateFlow(SongState())

@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.media3.common.Player
+import com.example.modularapp.audioplaying.AudioPlayerApp
 import com.example.modularapp.audioplaying.services.AudioService
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -32,8 +33,9 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("AutoboxingStateCreation")
 @Composable
-fun AudioController(player: Player){
+fun AudioController(){
     //play, pause, skip next, skip previous
+    val player = AudioPlayerApp.appModule.audioPlayer
     var playing by remember {
         mutableStateOf(player.isPlaying)
     }

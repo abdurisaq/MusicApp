@@ -1,20 +1,28 @@
 package com.example.modularapp.pages.navBar
 
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.modularapp.pages.content.DirectDownloadScreen
-import com.example.modularapp.pages.content.PlaylistScreen
-import com.example.modularapp.pages.content.SearchScreen
-import com.example.modularapp.pages.content.SettingScreen
-import com.example.modularapp.pages.content.SongScreen
+import com.example.modularapp.audioplaying.AudioPlayerApp
 import com.example.modularapp.pages.content.playing.AudioController
 import com.example.modularapp.pages.content.songs.SongViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+
 
 @Composable
 fun BottomNavigationBar(
@@ -22,74 +30,64 @@ fun BottomNavigationBar(
     selectedItemIndex: Int,
     onItemSelected: (Int) -> Unit,
     navController: NavHostController = rememberNavController(),
-    viewModel: SongViewModel
+//AudioController()
 ) {
+    var navigateToIndex by remember { mutableStateOf<Int?>(null) }
+
+    LaunchedEffect(navigateToIndex) {
+        navigateToIndex?.let { index ->
+            val route = when (index) {
+                0 -> "SongScreen"
+                1 -> "PlaylistScreen"
+                2 -> "SearchScreen"
+                3 -> "DirectDownloadScreen"
+                4 -> "SettingScreen"
+                else -> null
+            }
+            route?.let {
+                withContext(Dispatchers.Main) {
+                    navController.navigate(it) {
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                Log.d("Navigation","Navigation to screen $route")
+                }
+                navigateToIndex = null
+            }
+        }
+    }
+
     Column {
-        AudioController(player = viewModel.player)
+        AudioController()
+
+        
         NavigationBar {
             items.forEachIndexed { index, item ->
                 NavigationBarItem(
                     selected = selectedItemIndex == index,
-                    onClick = { onItemSelected(index)
-                        when (index) {
-                            0 -> navController.navigate(SongScreen){
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                            1 -> navController.navigate(PlaylistScreen){
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                            2 -> navController.navigate(SearchScreen){
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                            3 -> navController.navigate(DirectDownloadScreen){
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                            4 -> navController.navigate(SettingScreen){
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        } },
+                    onClick = {
+                        onItemSelected(index)
+                        navigateToIndex = index
+                    },
                     label = { Text(text = item.title) },
                     icon = {
                         BadgedBox(badge = {
                             when {
-                                item.badgeCount != null -> {
-                                    Badge { Text(text = item.badgeCount.toString()) }
-                                }
-                                item.hasNews -> {
-                                    Badge()
-                                }
+                                item.badgeCount != null -> Badge { Text(text = item.badgeCount.toString()) }
+                                item.hasNews -> Badge()
                             }
                         }) {
                             Icon(
-                                imageVector = if (index == selectedItemIndex) {
-                                    item.selectedIcon
-                                } else {
-                                    item.unselectedIcon
-                                },
+                                imageVector = if (index == selectedItemIndex) item.selectedIcon else item.unselectedIcon,
                                 contentDescription = item.title
                             )
                         }
+
                     }
+
                 )
             }
         }
