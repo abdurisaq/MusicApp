@@ -28,12 +28,13 @@ import kotlinx.coroutines.launch
 
 class SongViewModel(
     private val savedStateHandle: SavedStateHandle,
-    val player:Player,
+
     private val metaDataReader: AudioDataReader,
     private val dao: SongDao
 
 
 ):ViewModel() {
+    val player = AudioPlayerApp.appModule.audioPlayer
     private val audioUris = savedStateHandle.getStateFlow("audioUris", emptyList<Uri>())
 
 
@@ -120,10 +121,27 @@ class SongViewModel(
 //        player.play()
     }
 
+    init {
+        Log.d("playerAudio","starting player")
 
+        Log.d("playerAudio","player current position ${AudioPlayerApp.appModule.audioPlayer.currentPosition}")
+        Log.d("playerAudio","player current playback state ${AudioPlayerApp.appModule.audioPlayer.playbackState}")
+        AudioPlayerApp.appModule.audioPlayer.prepare()
+        Log.d("playerAudio","player current position ${AudioPlayerApp.appModule.audioPlayer.currentPosition}")
+        Log.d("playerAudio","player current playback state ${AudioPlayerApp.appModule.audioPlayer.playbackState}")
+
+    }
     override fun onCleared() {
+        Log.d("playerAudio","releasing player")
+        Log.d("playerAudio","player current position before clearing ${AudioPlayerApp.appModule.audioPlayer.currentPosition}")
+        Log.d("playerAudio","player current playback state before clearing ${AudioPlayerApp.appModule.audioPlayer.playbackState}")
+        Log.d("playerAudio","player current number of media items before clearing ${AudioPlayerApp.appModule.audioPlayer.mediaItemCount}")
+        player.clearMediaItems()
         player.release()
-        AudioPlayerApp.appModule.audioPlayer.release()
+        //AudioPlayerApp.appModule.audioPlayer.release()
+        Log.d("playerAudio","player current position after clearing ${AudioPlayerApp.appModule.audioPlayer.currentPosition}")
+        Log.d("playerAudio","player current playback state after clearing ${AudioPlayerApp.appModule.audioPlayer.playbackState}")
+        Log.d("playerAudio","player current number of media items after clearing ${AudioPlayerApp.appModule.audioPlayer.mediaItemCount}")
     }
 
     private val _state = MutableStateFlow(SongState())

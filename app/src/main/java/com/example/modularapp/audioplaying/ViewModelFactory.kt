@@ -45,7 +45,7 @@ class SongViewModelFactory(
     ): T {
         if (modelClass.isAssignableFrom(SongViewModel::class.java)) {
 
-            return SongViewModel(handle,player,metaDataReader,dao) as T
+            return SongViewModel(handle,metaDataReader,dao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

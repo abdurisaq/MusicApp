@@ -6,18 +6,36 @@ import android.app.NotificationManager
 import android.content.ComponentCallbacks2
 import android.content.Context
 import android.os.Build
+import android.util.Log
+import com.example.modularapp.audioplaying.data.SongDatabases
 
 
-class AudioPlayerApp :Application(), ComponentCallbacks2 {
+class AudioPlayerApp :Application() {//, ComponentCallbacks2
 
 
     companion object {
-        lateinit var appModule: AudioPlayerModule
+        @Volatile
+        private var INSTANCE: AudioPlayerModule? = null
+
+        val appModule: AudioPlayerModule
+            get() = INSTANCE ?: throw IllegalStateException("AudioPlayerModule not initialized")
+
+        fun initializeAppModule(app: Application) {
+            synchronized(this) {
+                INSTANCE?.audioPlayer?.release()
+                INSTANCE = AudioPlayerModuleImpl(app).also {
+                    Log.d("AudioPlayerApp", "AudioPlayerModule initialized")
+                }
+            }
+        }
     }
     //var staticAppModule = appModule
     override fun onCreate() {
         super.onCreate()
-        appModule = AudioPlayerModuleImpl(this)
+        //val db = SongDatabases.getDatabase(this)
+        Log.d("playerAudio","building audioplayer")
+        initializeAppModule(this)
+        //appModule = AudioPlayerModuleImpl(this)
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             val channel = NotificationChannel(
                 "running_channel",
@@ -26,9 +44,10 @@ class AudioPlayerApp :Application(), ComponentCallbacks2 {
             )
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
+            //registerComponentCallbacks(this)
         }
-        registerComponentCallbacks(this)
     }
+
 
     override fun onTerminate() {
         super.onTerminate()
@@ -36,22 +55,6 @@ class AudioPlayerApp :Application(), ComponentCallbacks2 {
         appModule.audioPlayer.release()
     }
 
-    override fun onTrimMemory(level: Int) {
-        super.onTrimMemory(level)
-        if (level >= ComponentCallbacks2.TRIM_MEMORY_MODERATE) {
-            // Release player resources when memory is low
-            appModule.audioPlayer.release()
-        }
-    }
 
-    override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
-        super.onConfigurationChanged(newConfig)
-    }
-
-    override fun onLowMemory() {
-        super.onLowMemory()
-        // Release player resources when memory is low
-        appModule.audioPlayer.release()
-    }
 
 }

@@ -13,7 +13,7 @@ import androidx.room.migration.AutoMigrationSpec
     entities = [AudioItem::class,Playlist::class,PlaysIn::class],
     version = 1,//hardcoded, might need to change later
 //    autoMigrations = [
-//        AutoMigration(from =2, to = 3)
+//        AutoMigration(from =1, to = 2)
 //    ]
 )
 @TypeConverters(ItemConverter::class)
@@ -29,7 +29,8 @@ abstract class SongDatabases:RoomDatabase() {
                     context.applicationContext,
                     SongDatabases::class.java,
                     "songs.db"
-                ).build()
+                ).fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }

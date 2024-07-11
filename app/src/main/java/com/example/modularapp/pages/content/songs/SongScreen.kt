@@ -142,13 +142,13 @@ fun SongScreen(
                                 if(viewModel.audioItems.value.find { it.content == song.content }== null) {
                                     Log.d("playerAudio", "not in player yet, adding to player songscreen")
                                     viewModel.addAudioUri(song.content,song.name)
-                                    Log.d("playerAudio","is player playing songscreen ${AudioPlayerApp.appModule.audioPlayer.isPlaying}")
-                                    AudioPlayerApp.appModule.audioPlayer.play()
-                                    Log.d("playerAudio","is player playing songscreen ${AudioPlayerApp.appModule.audioPlayer.isPlaying}")
+//                                    Log.d("playerAudio","is player playing songscreen ${AudioPlayerApp.appModule.audioPlayer.isPlaying}")
+//                                    AudioPlayerApp.appModule.audioPlayer.play()
+//                                    Log.d("playerAudio","is player playing songscreen ${AudioPlayerApp.appModule.audioPlayer.isPlaying}")
                                 }else{
                                     Log.d("playerAudio", "song is in player, playing song songscreen")
                                     viewModel.playAudio(song.content) // Adjusted to play audio
-                                    viewModel.player.play()
+//                                    viewModel.player.play()
                                 }
 
 

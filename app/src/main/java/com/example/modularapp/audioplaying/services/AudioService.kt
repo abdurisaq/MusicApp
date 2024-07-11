@@ -166,6 +166,7 @@ class AudioService(): Service() {
 
     override fun onDestroy() {
         player.removeListener(playerListener)
+        AudioPlayerApp.appModule.audioPlayer.release()
         super.onDestroy()
     }
 

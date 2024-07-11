@@ -2,6 +2,9 @@ package com.example.modularapp
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ComponentCallbacks2
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -37,19 +40,11 @@ import com.example.modularapp.pages.content.songs.FloatingButton
 import com.example.modularapp.pages.content.songs.SongViewModel
 
 class MainActivity : ComponentActivity() {
-//    private val db by lazy {
-//        Room.databaseBuilder(
-//            applicationContext,
-//            SongDatabases::class.java,
-//            "songs.db"
-//        ).build()
-//    }
-
 
     @SuppressLint("AutoboxingStateCreation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        SongDatabases.getDatabase(this)
+        AudioPlayerApp.initializeAppModule(this.application)
         val downloader = AndroidDownloader(this)
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
             ActivityCompat.requestPermissions(
@@ -120,11 +115,12 @@ class MainActivity : ComponentActivity() {
                     //modifier = Modifier.padding(16.dp),
                     content = { innerPadding ->
 
-                        ContentPages(innerPadding,navController,permissionGranted,downloader,selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type},audioViewModel,state , songViewModel)
+                        ContentPages(innerPadding,navController,permissionGranted,downloader,selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type},state , songViewModel)
                     }
                 )
             }
         }
     }
+
 }
 

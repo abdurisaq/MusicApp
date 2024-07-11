@@ -40,7 +40,6 @@ fun ContentPages(
     downloader: AndroidDownloader,
     selectedDownloadType: String,
     onTypeSelected: (String) -> Unit,
-    viewModel2: AudioMainViewModel,
     state: SongState,
     songViewModel2: SongViewModel
 ){

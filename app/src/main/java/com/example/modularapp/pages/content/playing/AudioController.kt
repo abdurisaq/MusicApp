@@ -35,6 +35,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AudioController(){
     //play, pause, skip next, skip previous
+
     val player = AudioPlayerApp.appModule.audioPlayer
     var playing by remember {
         mutableStateOf(player.isPlaying)
@@ -89,6 +90,7 @@ fun AudioController(){
 
                 context.startService(it)
             }
+
         }
     }
 

@@ -48,6 +48,7 @@ class AudioMainViewModel (
 
     override fun onCleared() {
         player.release()
+        AudioPlayerApp.appModule.audioPlayer.release()
     }
 
 
