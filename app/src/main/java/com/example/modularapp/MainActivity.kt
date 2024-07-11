@@ -22,15 +22,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.modularapp.audioplaying.AudioPlayerApp
-import com.example.modularapp.audioplaying.SongViewModelFactory
-import com.example.modularapp.audioplaying.data.SongDatabases
-import com.example.modularapp.download.AndroidDownloader
-import com.example.modularapp.pages.content.ContentPages
-import com.example.modularapp.pages.content.songs.FloatingButton
-import com.example.modularapp.pages.content.songs.SongViewModel
-import com.example.modularapp.pages.navBar.BottomNavigationBar
-import com.example.modularapp.pages.navBar.items
+import com.example.modularapp.services.SongViewModelFactory
+import com.example.modularapp.data.database.SongDatabases
+import com.example.modularapp.download.logic.AndroidDownloader
+import com.example.modularapp.screens.navigation.ContentPages
+
+import com.example.modularapp.screens.songs.SongViewModel
+import com.example.modularapp.screens.navigation.BottomNavigationBar
+import com.example.modularapp.screens.navigation.FloatingSongButton
+import com.example.modularapp.screens.navigation.items
 import com.example.modularapp.ui.theme.ModularAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -70,7 +70,7 @@ class MainActivity : ComponentActivity() {
                     db.dao,
                     this,
                     player = AudioPlayerApp.appModule.audioPlayer ,
-                    metaDataReader =AudioPlayerApp.appModule.metaDataReader)
+                    metaDataReader = AudioPlayerApp.appModule.metaDataReader)
             }
             val state by songViewModel.state.collectAsState()
             val currentBackStackEntry by navController.currentBackStackEntryAsState()
@@ -97,7 +97,10 @@ class MainActivity : ComponentActivity() {
                     },
                     floatingActionButton = {
                         if (currentDestination == "SongScreen") {
-                            FloatingButton(songViewModel::onEvent)
+                            FloatingSongButton(songViewModel::onEvent)
+                        }
+                        if(currentDestination == "PlaylistScreen"){
+                           // FloatingPlaylistButton()
                         }
                     },
                     //modifier = Modifier.padding(16.dp),
