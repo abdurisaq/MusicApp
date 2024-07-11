@@ -1,18 +1,16 @@
 [versions]
 agp = "8.3.2"
 coilCompose = "2.4.0"
-ffmpeg = "42c7dfcee1"
+
 gson = "2.11.0"
 javaxInject = "1"
-library = "42c7dfcee1"
-#aria = "-SNAPSHOT"
-#noinspection GradleDependency
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 
+libraryVersion = "0.16.0"
 lifecycleRuntimeKtx = "2.8.2"
 activityCompose = "1.9.0"
 composeBom = "2024.06.00"
@@ -50,10 +48,11 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
-ffmpeg = { module = "com.github.yausername.youtubedl-android:ffmpeg", version.ref = "ffmpeg" }
+#ffmpeg = { module = "com.github.yausername.youtubedl-android:ffmpeg", version.ref = "ffmpeg" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 javax-inject = { module = "javax.inject:javax.inject", version.ref = "javaxInject" }
-libraryv = { module = "com.github.yausername.youtubedl-android:library", version.ref = "library" }
+library = { module = "io.github.junkfood02.youtubedl-android:library", version.ref = "libraryVersion" }
+#libraryv = { module = "com.github.yausername.youtubedl-android:library", version.ref = "library" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -88,6 +87,7 @@ firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "fireb
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
 secrets-gradle-plugin = { module = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secretsGradlePlugin" }
+youtubedl-android-ffmpeg = { module = "io.github.junkfood02.youtubedl-android:ffmpeg", version.ref = "libraryVersion" }
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

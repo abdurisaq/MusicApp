@@ -2,20 +2,16 @@ package com.example.modularapp.pages.content.songs
 
 
 import com.example.modularapp.audioplaying.data.AudioItem
-import com.example.modularapp.audioplaying.data.AudioItemSimplified
 import com.example.modularapp.audioplaying.data.SortType
 
 sealed interface SongEvent {
-    data object saveSong:SongEvent
-    data object showDialog:SongEvent
+    data object SaveSong:SongEvent
+    data object ShowDialog:SongEvent
 
-    data object hideDialog:SongEvent
+    data object HideDialog:SongEvent
 
-    data class setTitle(val title:String):SongEvent
-    data class setArtist(val artist: String):SongEvent
-    data class setDuration(val duration:Int):SongEvent
 
-    data class sortSongs(val sortType: SortType):SongEvent
-    data class deleteSong(val song: AudioItem):SongEvent
+    data class SortSongs(val sortType: SortType):SongEvent
+    data class DeleteSong(val song: AudioItem):SongEvent
 
 }

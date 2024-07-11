@@ -1,14 +1,13 @@
 package com.example.modularapp.pages.content.songs
 
 
-import androidx.media3.common.MediaItem
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
-import androidx.media3.common.Player
 import com.example.modularapp.audioplaying.AudioDataReader
 import com.example.modularapp.audioplaying.AudioPlayerApp
 import com.example.modularapp.audioplaying.data.AudioItem
@@ -78,11 +77,11 @@ class SongViewModel(
                             Log.d("test","mediaItem string passed to addAudioUri $mediaItem")
                             player.addMediaItem(mediaItem)
                         }
-                        Log.d("playerAudio","No songs found with the URI: ${uri.toString()}")
+                        Log.d("playerAudio","No songs found with the URI: $uri")
 
                     } else {
                         // Songs found
-                        Log.d("playerAudio","Found ${listOfAudioItems.size} songs with the URI: ${uri.toString()}")
+                        Log.d("playerAudio","Found ${listOfAudioItems.size} songs with the URI: $uri")
                         val metadata = MediaMetadata.Builder()
                             .setTitle(title)
                             .build()
@@ -163,7 +162,7 @@ class SongViewModel(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), SongState())
     fun onEvent(event: SongEvent){
         when(event){
-            is SongEvent.deleteSong -> {
+            is SongEvent.DeleteSong -> {
                 try {
                     val updatedUris = audioUris.value.filter { it != event.song.content }
                     savedStateHandle.set("audioUris", updatedUris)
@@ -177,15 +176,14 @@ class SongViewModel(
                 }
 
             }
-            SongEvent.hideDialog -> {
+            SongEvent.HideDialog -> {
                 _state.update { it.copy(
                     isAddingSong = false
                 ) }
             }
-            SongEvent.saveSong -> {
+            SongEvent.SaveSong -> {
                 Log.d("SongViewModel", "Save Song Event Triggered")
                 val title = state.value.title
-                val artist = state.value.artist
                 val duration = state.value.duration
 
                 if(title.isBlank()  || duration == 0){
@@ -210,27 +208,13 @@ class SongViewModel(
                 }
 
             }
-            is SongEvent.setArtist -> {
-                _state.update { it.copy(
-                    artist = event.artist
-                ) }
-            }
-            is SongEvent.setDuration -> {
-                _state.update { it.copy(
-                    duration = event.duration
-                ) }
-            }
-            is SongEvent.setTitle -> {
-                _state.update { it.copy(
-                    title = event.title
-                ) }
-            }
-            SongEvent.showDialog -> {
+
+            SongEvent.ShowDialog -> {
                 _state.update { it.copy(
                     isAddingSong = true
                 ) }
             }
-            is SongEvent.sortSongs -> {
+            is SongEvent.SortSongs -> {
                 _sortType.value = event.sortType
             }
         }

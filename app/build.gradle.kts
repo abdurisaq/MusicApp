@@ -123,8 +123,10 @@ dependencies {
     implementation(libs.coil.compose)
 
     implementation(libs.gson)
-    implementation(libs.libraryv)
-    implementation(libs.ffmpeg)
+    implementation(libs.library)
+    //implementation(libs.libraryv)
+    implementation(libs.youtubedl.android.ffmpeg)
+//    implementation(libs.ffmpeg)
     //implementation(libs.aria2c)
     implementation (libs.rxjava2.rxjava)
     implementation (libs.rxjava2.rxandroid)

@@ -103,9 +103,7 @@ fun AudioController(){
         }
     }
 
-    Column (
-
-    ){
+    Column {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

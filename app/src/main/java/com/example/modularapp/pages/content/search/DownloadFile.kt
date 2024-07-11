@@ -18,11 +18,17 @@ fun downloadFile(context: Context, url: String): String {
             Log.e("MainActivity", "Failed to initialize YoutubeDL", e)
             return ""  // Return early if initialization fails
         }
+        Log.d("MainActivity","do we get here")
         YoutubeDL.getInstance().updateYoutubeDL(context)
+        Log.d("MainActivity","do we get here")
         val request = YoutubeDLRequest(url)
+        Log.d("MainActivity","do we get here")
         request.addOption("-f", "best")
+        Log.d("MainActivity","do we get here")
         val streamInfo = YoutubeDL.getInstance().getInfo(request)
+        Log.d("MainActivity","do we get here")
         println(streamInfo.url)
+        Log.d("MainActivity","do we get here")
 
         Log.d("MainActivity", "StreamInfo is not null")
         if (streamInfo.url != null) {

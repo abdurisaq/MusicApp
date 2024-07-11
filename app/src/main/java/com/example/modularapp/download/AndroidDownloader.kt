@@ -22,48 +22,14 @@ class AndroidDownloader(
     private fun decodeHtmlEntities(html: String): String {
         return HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
     }
-    fun isFileAlreadyDownloaded(fileName: String): File {
+    private fun isFileAlreadyDownloaded(fileName: String): File {
         val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val file = File(directory, fileName)
         Log.d("MainActivity","found ${file.name}")
         return file
     }
-    override fun downloadFile(url: String): Long {
-        val request = DownloadManager.Request(url.toUri())
-            .setMimeType("video/mpeg")
-            .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-            .setTitle("video.mpeg")
-            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "video.mpeg")
-        return downloadManager.enqueue(request)
-    }
-     override fun downloadFile2(url: String,title: String,type:String):Long{
 
-         val decodedTitle = decodeHtmlEntities(title)
-         val sanitizedTitle = sanitizeFileName(decodedTitle)
-
-        if(type == "Audio"){
-
-            val request = DownloadManager.Request(url.toUri())
-                .setMimeType("audio/mpeg")
-                .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
-                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-                .setTitle(sanitizedTitle)
-                .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, sanitizedTitle)//"$sanitizedTitle.mpeg"
-
-            return downloadManager.enqueue(request)
-        }
-
-         val request = DownloadManager.Request(url.toUri())
-             .setMimeType("video/mp4")
-             .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI)
-             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-             .setTitle(sanitizedTitle)
-             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "$sanitizedTitle.mp4")
-         return downloadManager.enqueue(request)
-
-    }
-    override fun downloadFile3(url: String,title: String,type:String):Long?{
+    override fun downloadFile(url: String,title: String,type:String):Long?{
 
         val decodedTitle = decodeHtmlEntities(title)
         val sanitizedTitle = sanitizeFileName(decodedTitle)
