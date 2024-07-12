@@ -12,11 +12,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.modularapp.data.states.PlaylistState
 import com.example.modularapp.data.states.SongState
 import com.example.modularapp.download.logic.AndroidDownloader
 import com.example.modularapp.download.pages.DirectDownload
 import com.example.modularapp.download.pages.DropDown
 import com.example.modularapp.download.pages.SearchYoutube
+import com.example.modularapp.screens.playlists.PlaylistScreen
+import com.example.modularapp.screens.playlists.PlaylistViewModel
 import com.example.modularapp.screens.songs.SongScreen
 import com.example.modularapp.screens.songs.SongViewModel
 
@@ -29,8 +32,10 @@ fun ContentPages(
     downloader: AndroidDownloader,
     selectedDownloadType: String,
     onTypeSelected: (String) -> Unit,
-    state: SongState,
-    songViewModel2: SongViewModel
+    songState: SongState,
+    songViewModel: SongViewModel,
+    playlistState: PlaylistState,
+    playlistViewModel: PlaylistViewModel,
 ){
 
     Box(modifier = Modifier
@@ -40,10 +45,10 @@ fun ContentPages(
             ) {
             composable(route = "SongScreen"){
 //                Text(text = "SongScreen")
-                SongScreen(state,songViewModel2::onEvent,innerPadding,songViewModel2)
+                SongScreen(songState,songViewModel::onEvent,innerPadding,songViewModel)
             }
             composable(route = "PlaylistScreen"){
-                Text(text = "PlaylistScreen")
+                PlaylistScreen(state = playlistState, onEvent =playlistViewModel::onEvent , padding = innerPadding, viewModel =playlistViewModel)
             }
             composable(route = "SearchScreen"){
 //                Text(text = "SearchScreen")

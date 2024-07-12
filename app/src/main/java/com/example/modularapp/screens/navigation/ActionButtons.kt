@@ -6,14 +6,14 @@ import androidx.compose.material.icons.filled.PlaylistAddCircle
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import com.example.modularapp.screens.playlist.PlaylistEvent
+import com.example.modularapp.screens.playlists.PlaylistsEvent
 import com.example.modularapp.screens.songs.SongEvent
 
 @Composable
 fun FloatingPlaylistButton(
-    onEvent: (PlaylistEvent) ->Unit
+    onEvent: (PlaylistsEvent) ->Unit
 ){
-    FloatingActionButton(onClick = {onEvent(PlaylistEvent.ShowDialog) }) {
+    FloatingActionButton(onClick = {onEvent(PlaylistsEvent.ShowDialog) }) {
         Icon(Icons.Default.PlaylistAddCircle, contentDescription = "Add Playlist")
     }
 }

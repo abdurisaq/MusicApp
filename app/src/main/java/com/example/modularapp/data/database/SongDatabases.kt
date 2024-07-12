@@ -12,14 +12,15 @@ import com.example.modularapp.data.entitites.PlaysIn
 
 @Database(
     entities = [AudioItem::class, Playlist::class, PlaysIn::class],
-    version = 1,//hardcoded, might need to change later
+    version = 2,//hardcoded, might need to change later
 //    autoMigrations = [
 //        AutoMigration(from =1, to = 2)
 //    ]
 )
 @TypeConverters(ItemConverter::class)
 abstract class SongDatabases:RoomDatabase() {
-    abstract val dao: SongDao
+    abstract val songDao: SongDao
+    abstract val playlistDao: PlaylistDao
     companion object {
         @Volatile
         private var INSTANCE: SongDatabases? = null

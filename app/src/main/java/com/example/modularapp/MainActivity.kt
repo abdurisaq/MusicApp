@@ -29,8 +29,11 @@ import com.example.modularapp.screens.navigation.ContentPages
 
 import com.example.modularapp.screens.songs.SongViewModel
 import com.example.modularapp.screens.navigation.BottomNavigationBar
+import com.example.modularapp.screens.navigation.FloatingPlaylistButton
 import com.example.modularapp.screens.navigation.FloatingSongButton
 import com.example.modularapp.screens.navigation.items
+import com.example.modularapp.screens.playlists.PlaylistViewModel
+import com.example.modularapp.services.PlaylistViewModelFactory
 import com.example.modularapp.ui.theme.ModularAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -67,12 +70,19 @@ class MainActivity : ComponentActivity() {
             val db = SongDatabases.getDatabase(context)
             val songViewModel: SongViewModel by viewModels {
                 SongViewModelFactory(
-                    db.dao,
+                    db.songDao,
                     this,
                     player = AudioPlayerApp.appModule.audioPlayer ,
                     metaDataReader = AudioPlayerApp.appModule.metaDataReader)
             }
-            val state by songViewModel.state.collectAsState()
+            val playlistViewModel : PlaylistViewModel by viewModels {
+                PlaylistViewModelFactory(
+                    db.playlistDao
+                )
+            }
+
+            val songState by songViewModel.state.collectAsState()
+            val playlistState by playlistViewModel.state.collectAsState()
             val currentBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = currentBackStackEntry?.destination?.route
             Log.d("Navigation","current destination = $currentDestination")
@@ -100,13 +110,16 @@ class MainActivity : ComponentActivity() {
                             FloatingSongButton(songViewModel::onEvent)
                         }
                         if(currentDestination == "PlaylistScreen"){
-                           // FloatingPlaylistButton()
+                           FloatingPlaylistButton(playlistViewModel::onEvent)
                         }
                     },
                     //modifier = Modifier.padding(16.dp),
                     content = { innerPadding ->
-
-                        ContentPages(innerPadding,navController,permissionGranted,downloader,selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type},state , songViewModel)
+                        ContentPages(innerPadding,navController,
+                            permissionGranted,downloader,
+                            selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type},
+                            songState , songViewModel,
+                            playlistState,playlistViewModel)
                     }
                 )
             }

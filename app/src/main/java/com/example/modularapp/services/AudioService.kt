@@ -35,7 +35,7 @@ class AudioService(): Service() {
         }
 
         val db = SongDatabases.getDatabase(applicationContext)
-        val songDao = db.dao
+        val songDao = db.songDao
         CoroutineScope(Dispatchers.IO).launch {
             val songName = songDao.getSongName(mediaItem).firstOrNull() ?: ""
             withContext(Dispatchers.Main) { // Switch to the main thread here

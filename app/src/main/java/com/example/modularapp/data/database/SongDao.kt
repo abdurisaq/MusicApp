@@ -6,6 +6,7 @@ import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
 import com.example.modularapp.data.entitites.AudioItem
+import com.example.modularapp.data.entitites.Playlist
 import kotlinx.coroutines.flow.Flow
 
 
@@ -29,6 +30,12 @@ interface SongDao {
 
     @Query("SELECT name FROM AudioItem WHERE mediaItem= :mediaItem")
     fun getSongName(mediaItem:MediaItem):List<String>
+
+    @Query("SELECT * FROM Playlist ORDER BY name ASC")
+    fun getPlaylistsOrderedByTitle(): Flow<List<Playlist>>
+
+    @Query("SELECT * FROM Playlist ORDER BY timestamp DESC")
+    fun getPlaylistsOrderedByTimeAdded(): Flow<List<Playlist>>
 
 //    @Transaction
 //    @Query("SELECT * FROM PlaysIn WHERE playlistId = :playlistId ORDER BY playlistPosition")

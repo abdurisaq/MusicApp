@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class Playlist(
     val name: String,
     val length:Int,
+    val timestamp: Long = System.currentTimeMillis(),
     @PrimaryKey(autoGenerate = true)
     val playlistId:Int? = null
 )
