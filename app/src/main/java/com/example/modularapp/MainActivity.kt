@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.material3.Scaffold
@@ -20,6 +21,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.modularapp.services.SongViewModelFactory
@@ -31,12 +34,19 @@ import com.example.modularapp.screens.songs.SongViewModel
 import com.example.modularapp.screens.navigation.BottomNavigationBar
 import com.example.modularapp.screens.navigation.FloatingPlaylistButton
 import com.example.modularapp.screens.navigation.FloatingSongButton
+import com.example.modularapp.screens.navigation.FloatingSongToPlaylistButton
+import com.example.modularapp.screens.playlists.playlist.SelectedPlaylistScreen
+import com.example.modularapp.screens.navigation.TopBar
 import com.example.modularapp.screens.navigation.items
 import com.example.modularapp.screens.playlists.PlaylistViewModel
 import com.example.modularapp.services.PlaylistViewModelFactory
 import com.example.modularapp.ui.theme.ModularAppTheme
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
     @SuppressLint("AutoboxingStateCreation")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +82,6 @@ class MainActivity : ComponentActivity() {
                 SongViewModelFactory(
                     db.songDao,
                     this,
-                    player = AudioPlayerApp.appModule.audioPlayer ,
                     metaDataReader = AudioPlayerApp.appModule.metaDataReader)
             }
             val playlistViewModel : PlaylistViewModel by viewModels {
@@ -83,6 +92,7 @@ class MainActivity : ComponentActivity() {
 
             val songState by songViewModel.state.collectAsState()
             val playlistState by playlistViewModel.state.collectAsState()
+            val sharedViewModel: SharedViewModel = viewModel()
             val currentBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = currentBackStackEntry?.destination?.route
             Log.d("Navigation","current destination = $currentDestination")
@@ -101,6 +111,11 @@ class MainActivity : ComponentActivity() {
             ModularAppTheme {
 
                 Scaffold(
+                    topBar = {
+                             if(currentDestination == "SelectedPlaylistScreen/{playlistId}"){
+                                 TopBar(navController)
+                             }
+                    },
 
                     bottomBar = {
                         BottomNavigationBar(items,selectedNavItemIndex,onItemSelected = { item -> selectedNavItemIndex = item},navController)
@@ -112,6 +127,12 @@ class MainActivity : ComponentActivity() {
                         if(currentDestination == "PlaylistScreen"){
                            FloatingPlaylistButton(playlistViewModel::onEvent)
                         }
+                        if(currentDestination == "SelectedPlaylistScreen/{playlistId}"){
+                            FloatingSongToPlaylistButton(
+                                sharedViewModel.currentViewModel.value!!::onEvent
+                                )
+                        }
+
                     },
                     //modifier = Modifier.padding(16.dp),
                     content = { innerPadding ->
@@ -119,7 +140,8 @@ class MainActivity : ComponentActivity() {
                             permissionGranted,downloader,
                             selectedDownloadType,onTypeSelected ={ type -> selectedDownloadType = type},
                             songState , songViewModel,
-                            playlistState,playlistViewModel)
+                            playlistState,playlistViewModel,
+                            sharedViewModel)
                     }
                 )
             }
@@ -128,3 +150,11 @@ class MainActivity : ComponentActivity() {
 
 }
 
+class SharedViewModel : ViewModel() {
+    private val _currentViewModel = MutableStateFlow<SongViewModel?>(null)
+    val currentViewModel: StateFlow<SongViewModel?> get() = _currentViewModel
+
+    fun setCurrentViewModel(viewModel: SongViewModel) {
+        _currentViewModel.value = viewModel
+    }
+}

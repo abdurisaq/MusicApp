@@ -29,3 +29,14 @@ fun FloatingSongButton(
 
 }
 
+@Composable
+fun FloatingSongToPlaylistButton(
+
+    onEvent: (SongEvent) ->Unit
+){
+    FloatingActionButton(onClick = {onEvent(SongEvent.ShowDialog) }) {
+        Icon(Icons.Default.Add, contentDescription = "Add Song")
+    }
+
+}
+

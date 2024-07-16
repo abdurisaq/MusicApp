@@ -10,7 +10,7 @@ sealed interface SongEvent {
 
     data object HideDialog: SongEvent
 
-
+    data class SetTitle(val title:String):SongEvent
     data class SortSongs(val sortType: SortType): SongEvent
     data class DeleteSong(val song: AudioItem): SongEvent
 

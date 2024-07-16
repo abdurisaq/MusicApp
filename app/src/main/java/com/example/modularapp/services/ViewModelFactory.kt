@@ -18,7 +18,7 @@ class SongViewModelFactory(
     owner: SavedStateRegistryOwner,
     defaultArgs: Bundle? = null,
     private val metaDataReader: AudioDataReader,
-    private val player: Player
+    private val playlistId:Int = -1
 ) :AbstractSavedStateViewModelFactory(owner,defaultArgs){
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(
@@ -28,7 +28,7 @@ class SongViewModelFactory(
     ): T {
         if (modelClass.isAssignableFrom(SongViewModel::class.java)) {
 
-            return SongViewModel(handle,metaDataReader,dao) as T
+            return SongViewModel(handle,metaDataReader,dao,playlistId) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.modularapp.data.states.PlaylistState
 import com.example.modularapp.data.states.SortType
 import com.example.modularapp.screens.songs.SongEvent
@@ -32,8 +33,8 @@ fun PlaylistScreen(
     state: PlaylistState,
     onEvent: (PlaylistsEvent) ->Unit,
     padding: PaddingValues,
-    viewModel: PlaylistViewModel
-
+    viewModel: PlaylistViewModel,
+    navController:NavHostController
 ) {
 
     if(state.isAddingPlaylist){
@@ -72,7 +73,10 @@ fun PlaylistScreen(
             Row {
                 Text(playlist.name,
                     modifier = Modifier.clickable {
-                        Log.d("test","clicked")
+                        navController.navigate("SelectedPlaylistScreen/${playlist.playlistId}"){
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     },
                     fontSize = 30.sp
                     )

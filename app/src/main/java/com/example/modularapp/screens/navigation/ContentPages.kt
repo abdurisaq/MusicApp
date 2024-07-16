@@ -8,10 +8,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.modularapp.AudioPlayerApp
+import com.example.modularapp.SharedViewModel
+import com.example.modularapp.data.database.SongDatabases
 import com.example.modularapp.data.states.PlaylistState
 import com.example.modularapp.data.states.SongState
 import com.example.modularapp.download.logic.AndroidDownloader
@@ -20,8 +27,10 @@ import com.example.modularapp.download.pages.DropDown
 import com.example.modularapp.download.pages.SearchYoutube
 import com.example.modularapp.screens.playlists.PlaylistScreen
 import com.example.modularapp.screens.playlists.PlaylistViewModel
+import com.example.modularapp.screens.playlists.playlist.SelectedPlaylistScreen
 import com.example.modularapp.screens.songs.SongScreen
 import com.example.modularapp.screens.songs.SongViewModel
+import com.example.modularapp.services.SongViewModelFactory
 
 @Composable
 
@@ -36,6 +45,7 @@ fun ContentPages(
     songViewModel: SongViewModel,
     playlistState: PlaylistState,
     playlistViewModel: PlaylistViewModel,
+    sharedViewModel:SharedViewModel
 ){
 
     Box(modifier = Modifier
@@ -48,7 +58,25 @@ fun ContentPages(
                 SongScreen(songState,songViewModel::onEvent,innerPadding,songViewModel)
             }
             composable(route = "PlaylistScreen"){
-                PlaylistScreen(state = playlistState, onEvent =playlistViewModel::onEvent , padding = innerPadding, viewModel =playlistViewModel)
+                PlaylistScreen(state = playlistState, onEvent =playlistViewModel::onEvent , padding = innerPadding, viewModel =playlistViewModel,
+                    navController
+                    )
+            }
+            composable(route="SelectedPlaylistScreen/{playlistId}", arguments = listOf(navArgument("playlistId"){type = NavType.IntType}
+            )){backStackEntry ->
+                val playlistId:Int = backStackEntry.arguments?.getInt("playlistId") ?: -1
+                //Log.d("SongViewModel","between navigating, going to navigate to playlist with id $playlistId")
+                val context = LocalContext.current
+                val factory = SongViewModelFactory(
+                    SongDatabases.getDatabase(context).songDao,
+                    backStackEntry,
+                    metaDataReader = AudioPlayerApp.appModule.metaDataReader,
+                    playlistId = playlistId)
+                val viewModel:SongViewModel = viewModel(factory = factory)
+                sharedViewModel.setCurrentViewModel(viewModel)
+                SelectedPlaylistScreen(padding = innerPadding, viewModel,songViewModel)
+
+
             }
             composable(route = "SearchScreen"){
 //                Text(text = "SearchScreen")
