@@ -8,10 +8,11 @@ import com.example.modularapp.AudioPlayerApp
 class AudioReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent != null) {
+            val player = AudioPlayerApp.appModule.audioPlayer
             when (intent.action) {
                 "com.example.modularapp.ACTION_PLAY_PAUSE" -> {
 
-                    val player = AudioPlayerApp.appModule.audioPlayer
+
 
                     if (player.isPlaying) {
                         player.pause()
@@ -24,26 +25,27 @@ class AudioReceiver: BroadcastReceiver() {
                         context?.startService(it)
                     }
                 }
+                "com.example.modularapp.ACTION_SKIP" -> {
+
+                    player.seekToNextMediaItem()
+                    Intent(context, AudioService::class.java).also {
+                        it.action = AudioService.Actions.PLAY.toString()
+
+                        context?.startService(it)
+                    }
+                }
+                "com.example.modularapp.ACTION_PREVIOUS" -> {
+
+
+                    player.seekToPreviousMediaItem()
+                    Intent(context, AudioService::class.java).also {
+                        it.action = AudioService.Actions.PLAY.toString()
+
+                        context?.startService(it)
+                    }
+                }
             }
         }
     }
 }
 
-
-//
-//val mediaItem = player.currentMediaItem
-//if(context != null && (mediaItem != null)){
-//    val coroutineScope = CoroutineScope(Dispatchers.IO)
-//    coroutineScope.launch {
-//        Log.d("test","breakpoint 1")
-//        val db = SongDatabases.getDatabase(context)
-//        Log.d("test","breakpoint 2")
-//        val songDao = db.dao
-//        Log.d("test","breakpoint 3")
-//        val name = songDao.getSongName(mediaItem)[0]
-//    }
-//
-//}
-//
-//Log.d("test","pausing ${player.currentPosition}")
-//Log.d("test","mediaitem ${player.currentMediaItem?.mediaMetadata}")

@@ -46,7 +46,8 @@ class AudioService(): Service() {
 
 
     private var playPausePendingIntent: PendingIntent? = null
-
+    private var skipPendingIntent: PendingIntent? = null
+    private var previousPendingIntent: PendingIntent? = null
     private val playerListener = object : Player.Listener {
         override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
             if (mediaItem != null) {
@@ -62,9 +63,14 @@ class AudioService(): Service() {
             if (mediaItem != null) {
                 retrieveSongName(mediaItem) { songName ->
                     currentSongName = songName
-                    updateNotification() // Update notification when playback state changes
+                    updateNotification()
+                    Log.d("test","updating notification ")
                 }
             }
+        }
+
+        override fun onIsPlayingChanged(isPlaying: Boolean){
+            updateNotification()
         }
 
 
@@ -78,11 +84,29 @@ class AudioService(): Service() {
         val playPauseIntent = Intent(this, AudioReceiver::class.java).apply {
             action = "com.example.modularapp.ACTION_PLAY_PAUSE"
         }
+        val skipIntent = Intent(this, AudioReceiver::class.java).apply {
+            action = "com.example.modularapp.ACTION_SKIP"
+        }
+        val previousIntent = Intent(this, AudioReceiver::class.java).apply {
+            action = "com.example.modularapp.ACTION_PREVIOUS"
+        }
 
         playPausePendingIntent = PendingIntent.getBroadcast(
             this,
             0,
             playPauseIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        skipPendingIntent = PendingIntent.getBroadcast(
+            this,
+            0,
+            skipIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        previousPendingIntent = PendingIntent.getBroadcast(
+            this,
+            0,
+            previousIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
@@ -129,7 +153,7 @@ class AudioService(): Service() {
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .addAction(NotificationCompat.Action.Builder(
-                R.drawable.ic_prev, "Previous", playPausePendingIntent)
+                R.drawable.ic_prev, "Previous", previousPendingIntent)
                 .setAuthenticationRequired(false)
                 .build())
             .addAction(NotificationCompat.Action.Builder(
@@ -137,11 +161,11 @@ class AudioService(): Service() {
                 .setAuthenticationRequired(false)
                 .build())
             .addAction(NotificationCompat.Action.Builder(
-                    R.drawable.ic_next, "Skip", playPausePendingIntent)
+                R.drawable.ic_next, "Skip", skipPendingIntent)
                 .setAuthenticationRequired(false)
                 .build())
             .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
-                .setShowActionsInCompactView(1) // Show pause button in compact view
+                .setShowActionsInCompactView(0, 1, 2) // Show pause button in compact view
                 .setCancelButtonIntent(playPausePendingIntent) // Set pause action as cancel button
                 .setShowCancelButton(true) // Show cancel button
                 .setMediaSession(null) // Set media session to null

@@ -14,7 +14,7 @@ fun FloatingPlaylistButton(
     onEvent: (PlaylistsEvent) ->Unit
 ){
     FloatingActionButton(onClick = {onEvent(PlaylistsEvent.ShowDialog) }) {
-        Icon(Icons.Default.PlaylistAddCircle, contentDescription = "Add Playlist")
+        Icon(Icons.Default.Add, contentDescription = "Add Playlist")
     }
 }
 

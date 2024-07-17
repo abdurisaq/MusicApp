@@ -74,7 +74,7 @@ fun ContentPages(
                     playlistId = playlistId)
                 val viewModel:SongViewModel = viewModel(factory = factory)
                 sharedViewModel.setCurrentViewModel(viewModel)
-                SelectedPlaylistScreen(padding = innerPadding, viewModel,songViewModel)
+                SelectedPlaylistScreen(padding = innerPadding, viewModel,songViewModel,playlistId)
 
 
             }

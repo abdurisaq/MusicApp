@@ -33,9 +33,14 @@ class AudioDataReaderImpl(
             null,
              null
         )?.use {cursor ->
-            val index = cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DISPLAY_NAME)
-            cursor.moveToFirst()
-            cursor.getString(index)
+            if(cursor.moveToFirst()){
+                val index = cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DISPLAY_NAME)
+                cursor.moveToFirst()
+                cursor.getString(index)
+            }else{
+                null
+            }
+
 
         }
 

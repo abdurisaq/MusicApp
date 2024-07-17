@@ -27,6 +27,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.media3.common.util.Log
+import com.example.modularapp.AudioPlayerApp
 import com.example.modularapp.data.states.SongState
 import com.example.modularapp.data.states.SortType
 import com.example.modularapp.audio.millisecondsToMinuteAndSeconds
@@ -62,11 +64,14 @@ fun SongScreen(
         }
     )
 
-    if(state.isAddingSong){
-        //AddSongDialog(state = state, onEvent =onEvent )
-        preselectedAudio.launch(arrayOf("audio/*"))
+    LaunchedEffect(state.isAddingSong) {
+        if(state.isAddingSong){
+            //AddSongDialog(state = state, onEvent =onEvent )
+            preselectedAudio.launch(arrayOf("audio/*"))
 
+        }
     }
+
     Column (
         verticalArrangement = Arrangement.SpaceEvenly
     ){
@@ -112,14 +117,22 @@ fun SongScreen(
                     ) {
                         Text(text = song.name, fontSize = 20.sp,
                             modifier = Modifier.clickable {
-                                if(viewModel.audioItems.value.find { it.content == song.content }== null) {
-                                    Log.d("playerAudio", "not in player yet, adding to player songscreen")
-                                    viewModel.addAudioUri(song.content,song.name)
-                                }else{
-                                    Log.d("playerAudio", "song is in player, playing song songscreen")
-                                    viewModel.playAudio(song.content) // Adjusted to play audio
-//                                    viewModel.player.play()
+
+                                if(AudioPlayerApp.appModule.currentPlaylist != -1){
+                                    viewModel.loadPlayer()
+                                    AudioPlayerApp.appModule.currentPlaylist = -1
                                 }
+                                viewModel.playAudio(song.content)
+
+
+//                                if(viewModel.audioItems.value.find { it.content == song.content }== null) {
+//                                    Log.d("playerAudio", "not in player yet, adding to player songscreen")
+//                                    viewModel.addAudioUri(song.content,song.name)
+//                                }else{
+//                                    Log.d("playerAudio", "song is in player, playing song  ${song.name}")
+//                                    viewModel.playAudio(song.content) // Adjusted to play audio
+////                                    viewModel.player.play()
+//                                }
 
 
                             })

@@ -28,12 +28,15 @@ import com.example.modularapp.screens.songs.SongViewModel
 
 @Composable
 fun SelectSongDialogue(
-    state: SongState,
+    mainState: SongState,
+    selectedPlaylistState:SongState,
     onEvent: (SongEvent) -> Unit,
     modifier:Modifier = Modifier,
     viewModel: SongViewModel
 ){
-
+    val songsToShow = mainState.songs
+    val songsToRemoveSet = selectedPlaylistState.songs.toSet()
+    val filteredSongs = songsToShow.filterNot { it in songsToRemoveSet }
 
     AlertDialog(
         modifier = modifier,
@@ -48,7 +51,7 @@ fun SelectSongDialogue(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
 
-                items(state.songs){ song ->
+                items(filteredSongs){ song ->
                     Row(
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -71,11 +74,6 @@ fun SelectSongDialogue(
                             Text(text = song.artist, fontSize = 12.sp)
                         }
                         Text(text = millisecondsToMinuteAndSeconds(song.duration), fontSize = 15.sp)
-                        IconButton(onClick = {
-                            onEvent(SongEvent.DeleteSong(song))
-                        }) {
-                            Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete song")
-                        }
 
                     }
                 }

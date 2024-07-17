@@ -127,30 +127,27 @@ class SongViewModel(
     }
 
 
-//    if(playlistId!= -1) {
-//        val playlistRelation: PlaysIn? = it.id?.let {id ->
-//            PlaysIn(
-//                playlistId = playlistId,
-//                songId = id,
-//                playlistPosition = 0
-//            )
-//        }
-//        if (playlistRelation != null) {
-//            dao.upsertToPlaylist(playlistRelation)
-//        }
-//    }
+
     fun playAudio(uri:Uri){
-        val mediaItem = audioItems.value.find { it.content == uri }?.mediaItem
-        if(mediaItem == null) {
-            Log.d("playerAudio","song isn't in audioItmes $uri")
-
+        Log.d("playerAudio","do we even get here, playing audio")
+        val audioItem = audioItems.value.find { it.content == uri }
+        if (audioItem != null) {
+            Log.d("playerAudio","do we even get here, audioitem passed in is ${audioItem.name} ")
         }else{
-            Log.d("playerAudio","song is in audioItmes $uri")
-            Log.d("playerAudio","is player playing ${player.isPlaying}")
+            Log.d("playerAudio","audio item passed is null, aka with uri, can't find in audioitems ")
+        }
+        val index = audioItems.value.indexOf(audioItem)
+        Log.d("playerAudio","index in player is $index ")
 
-            player.setMediaItem(mediaItem)
-            player.play()
-            Log.d("playerAudio","is player playing ${player.isPlaying}")
+        if (index in 0 until player.mediaItemCount) {
+            if (audioItem != null) {
+                Log.d("playerAudio","going to be playing song ${audioItem.name}")
+            }
+            Log.d("playerAudio","its position in the player is $index")
+            player.seekToDefaultPosition(index)
+        } else {
+            // Handle the invalid index case
+            Log.e("SeekTo", "Index out of bounds: $index")
         }
     }
 
@@ -181,6 +178,20 @@ class SongViewModel(
 
             )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), SongState())
+
+    fun loadPlayer(){
+        Log.d("playerAudio","do we even get here, on new screen loading in songs")
+        val songs = state.value.songs.map { it.mediaItem }
+        val uris = state.value.songs.map { it.content }
+        val updatedList = audioUris.value + uris
+        savedStateHandle.set(audioPath, updatedList)
+
+        player.clearMediaItems()
+        player.addMediaItems(songs)
+
+        Log.d("playerAudio","do we even get here, player size is : ${player.mediaItemCount}")
+    }
+
     fun onEvent(event: SongEvent){
         when(event){
             is SongEvent.DeleteSong -> {
