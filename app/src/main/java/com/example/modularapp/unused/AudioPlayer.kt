@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.modularapp.audio.AudioController
 import com.example.modularapp.audio.AudioMainViewModel
-import com.example.modularapp.audio.millisecondsToMinuteAndSeconds
+import com.example.modularapp.services.millisecondsToMinuteAndSeconds
 
 @Composable
 fun AudioPlayer(viewModel: AudioMainViewModel) {

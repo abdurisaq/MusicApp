@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.media3.common.Player
 import com.example.modularapp.AudioPlayerApp
 import com.example.modularapp.services.AudioService
+import com.example.modularapp.services.millisecondsToMinuteAndSeconds
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlin.math.roundToLong
@@ -159,16 +160,3 @@ fun AudioController(){
 
 
 
-
-
-
-fun millisecondsToMinuteAndSeconds(duration:Int):String{
-    val totalSeconds :Int = duration/1000
-    val minutes: Int = totalSeconds/ 60
-    val leftoverSeconds:Int = totalSeconds - (minutes*60)
-    var leftoverSecondsString:String = leftoverSeconds.toString()
-    if(leftoverSecondsString.length <= 1){
-        leftoverSecondsString = "0${leftoverSecondsString}"
-    }
-    return "${minutes}:${leftoverSecondsString}"
-}

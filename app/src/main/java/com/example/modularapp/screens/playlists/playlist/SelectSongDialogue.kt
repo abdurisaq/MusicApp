@@ -21,10 +21,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.modularapp.audio.millisecondsToMinuteAndSeconds
 import com.example.modularapp.data.states.SongState
 import com.example.modularapp.screens.songs.SongEvent
 import com.example.modularapp.screens.songs.SongViewModel
+import com.example.modularapp.services.millisecondsToMinuteAndSeconds
 
 @Composable
 fun SelectSongDialogue(

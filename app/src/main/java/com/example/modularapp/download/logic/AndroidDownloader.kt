@@ -14,14 +14,12 @@ class AndroidDownloader(
 ): Downloader {
     private val downloadManager = context.getSystemService(DownloadManager::class.java)
     private fun sanitizeFileName(name: String): String {
-        val sanitized = name.replace("[^a-zA-Z0-9.-]".toRegex(), "_")
+        val decoded = HtmlCompat.fromHtml(name, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
+        val sanitized = decoded.replace("[^a-zA-Z0-9.-]".toRegex(), "_")
         // Replace multiple consecutive underscores with a single underscore
         return sanitized.replace("_+".toRegex(), "_")
     }
 
-    private fun decodeHtmlEntities(html: String): String {
-        return HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
-    }
     private fun isFileAlreadyDownloaded(fileName: String): File {
         val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
         val file = File(directory, fileName)
@@ -30,10 +28,8 @@ class AndroidDownloader(
     }
 
     override fun downloadFile(url: String,title: String,type:String):Long?{
+        val sanitizedTitle = sanitizeFileName(title)
 
-        val decodedTitle = decodeHtmlEntities(title)
-        val sanitizedTitle = sanitizeFileName(decodedTitle)
-        Log.d("MainActivity","in downloader 3")
 
         if(type == "Audio"){
             val searchedForFile = isFileAlreadyDownloaded("${sanitizedTitle}.mp3")

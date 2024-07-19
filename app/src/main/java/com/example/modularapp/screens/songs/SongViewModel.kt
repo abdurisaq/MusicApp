@@ -145,6 +145,7 @@ class SongViewModel(
             }
             Log.d("playerAudio","its position in the player is $index")
             player.seekToDefaultPosition(index)
+            player.play()
         } else {
             // Handle the invalid index case
             Log.e("SeekTo", "Index out of bounds: $index")

@@ -8,6 +8,7 @@ import android.provider.OpenableColumns
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,8 +40,8 @@ import androidx.media3.common.util.Log
 import com.example.modularapp.AudioPlayerApp
 import com.example.modularapp.data.states.SongState
 import com.example.modularapp.data.states.SortType
-import com.example.modularapp.audio.millisecondsToMinuteAndSeconds
-
+import com.example.modularapp.services.millisecondsToMinuteAndSeconds
+import com.example.modularapp.services.readID3Tags
 
 
 @Composable
@@ -116,13 +118,20 @@ fun SongScreen(
                         modifier = Modifier.weight(1f)
                     ) {
                         Text(text = song.name, fontSize = 20.sp,
-                            modifier = Modifier.clickable {
-
-                                if(AudioPlayerApp.appModule.currentPlaylist != -1){
-                                    viewModel.loadPlayer()
-                                    AudioPlayerApp.appModule.currentPlaylist = -1
-                                }
-                                viewModel.playAudio(song.content)
+                            modifier = Modifier
+                                .pointerInput(Unit) {
+                                    detectTapGestures(
+                                        onLongPress = {
+                                            readID3Tags(song.name)
+                                        },
+                                        onTap = {
+                                            if(AudioPlayerApp.appModule.currentPlaylist != -1){
+                                                viewModel.loadPlayer()
+                                                AudioPlayerApp.appModule.currentPlaylist = -1
+                                            }
+                                            viewModel.playAudio(song.content)
+                                        }
+                                    )
 
 
 //                                if(viewModel.audioItems.value.find { it.content == song.content }== null) {

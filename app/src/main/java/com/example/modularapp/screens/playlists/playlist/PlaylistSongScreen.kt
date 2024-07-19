@@ -28,10 +28,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.modularapp.AudioPlayerApp
-import com.example.modularapp.audio.millisecondsToMinuteAndSeconds
 import com.example.modularapp.data.states.SortType
 import com.example.modularapp.screens.songs.SongEvent
 import com.example.modularapp.screens.songs.SongViewModel
+import com.example.modularapp.services.millisecondsToMinuteAndSeconds
 
 
 @Composable
@@ -95,24 +95,11 @@ fun SelectedPlaylistScreen(
                 ) {
                     Text(text = song.name.replace("_"," "), fontSize = 20.sp,
                         modifier = Modifier.clickable {
-
-
                             if(AudioPlayerApp.appModule.currentPlaylist != playlistId){
                                 viewModel.loadPlayer()
                                 AudioPlayerApp.appModule.currentPlaylist = playlistId
                             }
                             viewModel.playAudio(song.content)
-
-//                            if(viewModel.audioItems.value.find { it.content == song.content }== null) {
-//                                Log.d("playerAudio", "not in player yet, adding to player songscreen")
-//                                viewModel.addAudioUri(song.content,song.name)
-//                            }else{
-//                                Log.d("playerAudio", "song is in player, playing song songscreen")
-//                                viewModel.playAudio(song.content) // Adjusted to play audio
-////                                    viewModel.player.play()
-//                            }
-
-
                         })
                     Text(text = song.artist, fontSize = 12.sp)
                 }

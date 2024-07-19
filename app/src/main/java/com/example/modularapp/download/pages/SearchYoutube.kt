@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.example.modularapp.BuildConfig
 import com.example.modularapp.download.logic.downloadFile
+import com.example.modularapp.services.readID3Tags
 
 @Composable
 fun SearchYoutube(downloader: Downloader, permissionGranted:Boolean, selectedDownloadType: String){
@@ -160,7 +161,9 @@ fun DisplayItem(item: YoutubeResponseItem, downloader: Downloader, permissionGra
                                             Toast.LENGTH_SHORT
                                         )
                                         .show()
+
                                 }
+
                             } else {
                                 Toast
                                     .makeText(
