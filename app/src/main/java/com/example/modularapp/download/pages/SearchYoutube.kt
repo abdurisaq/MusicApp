@@ -147,7 +147,7 @@ fun DisplayItem(item: YoutubeResponseItem, downloader: Downloader, permissionGra
                                         downloading = true
 
                                         downloader.downloadFile(
-                                            downloadFile(context, url),
+                                            downloadFile(context, url,selectedDownloadType),
                                             item.snippet.title,
                                             selectedDownloadType
                                         )

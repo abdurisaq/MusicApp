@@ -56,7 +56,7 @@ fun DirectDownload(downloader: Downloader, permissionGranted:Boolean, selectedDo
                         withContext(Dispatchers.IO) {
                             search = ktorClient.getYoutubeVideoName(videoUrl)
                             downloader.downloadFile(
-                                downloadFile(context,videoUrl),
+                                downloadFile(context,videoUrl,selectedDownloadType),
                                 search?.title ?:"No name",selectedDownloadType)
 
                         }

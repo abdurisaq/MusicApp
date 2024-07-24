@@ -6,8 +6,9 @@ import com.yausername.youtubedl_android.YoutubeDL
 import com.yausername.youtubedl_android.YoutubeDLException
 import com.yausername.youtubedl_android.YoutubeDLRequest
 
-fun downloadFile(context: Context, url: String): String {
+fun downloadFile(context: Context, url: String,downloadType:String): String {
     Log.d("MainActivity", "Successfully entered function")
+    Log.d("MainActivity",url)
     var returnUrl = ""
     try {
         // Initialize YoutubeDL
@@ -19,18 +20,19 @@ fun downloadFile(context: Context, url: String): String {
             return ""  // Return early if initialization fails
         }
         Log.d("MainActivity","do we get here")
-        YoutubeDL.getInstance().updateYoutubeDL(context)
+        YoutubeDL.getInstance().updateYoutubeDL(context, YoutubeDL.UpdateChannel.NIGHTLY)
         Log.d("MainActivity","do we get here")
         val request = YoutubeDLRequest(url)
-        Log.d("MainActivity","do we get here")
-        request.addOption("-f", "best")
+        if(downloadType =="Audio"){
+            request.addOption("-x","--extract-audio")
+            request.addOption("--audio-format","mp3")
+        }
         Log.d("MainActivity","do we get here")
         val streamInfo = YoutubeDL.getInstance().getInfo(request)
         Log.d("MainActivity","do we get here")
-        println(streamInfo.url)
-        Log.d("MainActivity","do we get here")
 
-        Log.d("MainActivity", "StreamInfo is not null")
+        Log.d("MainActivity","do we get here")
+        Log.d("MainActivity","Stream info url: ${streamInfo.url}")
         if (streamInfo.url != null) {
             // Direct URL fetched successfully
             println(streamInfo.url)
