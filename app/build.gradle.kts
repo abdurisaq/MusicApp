@@ -42,6 +42,10 @@ android {
         kapt {
             arguments{
                 arg("room.schemaLocation","$projectDir/schemas")
+
+            }
+            javacOptions {
+                option("--add-opens", "jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED")
             }
         }
         ndk {
@@ -84,7 +88,7 @@ android {
 
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.7"
     }
     packaging {
         resources {
