@@ -5,51 +5,67 @@ import android.util.Log
 import com.yausername.youtubedl_android.YoutubeDL
 import com.yausername.youtubedl_android.YoutubeDLException
 import com.yausername.youtubedl_android.YoutubeDLRequest
+import org.json.JSONObject
 
-fun downloadFile(context: Context, url: String,downloadType:String): String {
-    Log.d("MainActivity", "Successfully entered function")
-    Log.d("MainActivity",url)
-    var returnUrl = ""
+fun downloadFile(context: Context, url: String, downloadType: String): String {
+    Log.d("MainActivity", "Fetching direct download URL for: $url (Type: $downloadType)")
+    var directUrl = ""
+
     try {
-        // Initialize YoutubeDL
         try {
             YoutubeDL.getInstance().init(context)
-            Log.d("MainActivity", "Successfully initialized YoutubeDL")
+            Log.d("MainActivity", "YoutubeDL initialized")
         } catch (e: YoutubeDLException) {
             Log.e("MainActivity", "Failed to initialize YoutubeDL", e)
-            return ""  // Return early if initialization fails
+            return ""
         }
-        Log.d("MainActivity","do we get here")
-        YoutubeDL.getInstance().updateYoutubeDL(context, YoutubeDL.UpdateChannel.NIGHTLY)
-        Log.d("MainActivity","do we get here")
+
         val request = YoutubeDLRequest(url)
-        if(downloadType =="Audio"){
-            request.addOption("-x","--extract-audio")
-            request.addOption("--audio-format","mp3")
-        }
-        Log.d("MainActivity","do we get here")
-        val streamInfo = YoutubeDL.getInstance().getInfo(request)
-        Log.d("MainActivity","do we get here")
+        request.addOption("--skip-download")
+        request.addOption("--dump-json")
+        val response = YoutubeDL.getInstance().execute(request)
+        val output = response.out
+        Log.d("MainActivity", "Raw yt-dlp JSON output: $output")
 
-        Log.d("MainActivity","do we get here")
-        Log.d("MainActivity","Stream info url: ${streamInfo.url}")
-        if (streamInfo.url != null) {
-            // Direct URL fetched successfully
-            println(streamInfo.url)
-            Log.d("MainActivity", "fileSize :: ${streamInfo.fileSize}")
-            val directUrl = streamInfo.url
-            Log.d("MainActivity", "Direct URL: $directUrl")
-            if (directUrl != null) {
-                returnUrl = directUrl
+        val json = JSONObject(output)
+
+        when (downloadType) {
+            "Audio" -> {
+                val formats = json.getJSONArray("formats")
+                for (i in 0 until formats.length()) {
+                    val format = formats.getJSONObject(i)
+                    val asr = format.optInt("asr", -1)
+                    if (asr != -1) {
+                        directUrl = format.getString("url")
+                        Log.d("MainActivity", "Extracted audio URL: $directUrl")
+                        break
+                    }
+                }
+                if (directUrl == "") Log.e("MainActivity", "No audio format URL found.")
             }
-        } else {
-            // URL is null
-            Log.e("MainActivity", "URL is null")
+            "Video" -> {
+                val formats = json.getJSONArray("formats")
+                for (i in formats.length() - 1 downTo 0) {
+                    val format = formats.getJSONObject(i)
+                    val vcodec = format.optString("vcodec", "none")
+                    val acodec = format.optString("acodec", "none")
+                    if (vcodec != "none" && acodec != "none") {
+                        directUrl = format.getString("url")
+                        Log.d("MainActivity", "Extracted video URL: $directUrl")
+                        break
+                    }
+                }
+                if (directUrl == "") Log.e("MainActivity", "No video format URL found.")
+            }
+            else -> {
+                Log.e("MainActivity", "Unknown download type: $downloadType")
+                return ""
+            }
         }
-    } catch (e: Exception) {
-        // Handle any other exceptions
-        Log.e("MainActivity", "Error getting direct URL", e)
-    }
-    return returnUrl
 
+    } catch (e: Exception) {
+        Log.e("MainActivity", "Error fetching direct URL", e)
+    }
+
+    return directUrl
 }
